@@ -104,7 +104,7 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index']);
-
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
     // Stocks
     Route::get('/stocks', [StockController::class, 'index']);
     Route::get('/stocks/create', [StockController::class, 'create']);

@@ -13,7 +13,7 @@
                 <input type="hidden" name="product_id" id="product_id">
                 <div class="form-group">
                     <select class="form-control product" id="stk_product" name="product" value="{{old('product')}}" placeholder="Quantity">
-                        <option value="Select KG">--Select Product--</option>
+                        <option value="">--Select Product--</option>
                         @foreach ($products as $product )
                         <option value="{{$product->id}}">{{$product->name}}</option>
                         @endforeach

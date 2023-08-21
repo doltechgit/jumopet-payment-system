@@ -189,7 +189,7 @@ $(document).ready(function () {
                 const products = response.products;
                 console.log(products);
                 $(".product").append(
-                    "<option value='Select Product'>Select Product</option>"
+                    "<option value=''>Select Product</option>"
                 );
                 $.each(products, function (i, item) {
                     $(".product").append(

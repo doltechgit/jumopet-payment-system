@@ -130,7 +130,7 @@
                                     <td><label>Category:</label></td>
                                     <td class="">
                                         <select class="form-control product" id="product" name="product" value="{{old('product')}}" required>
-                                            <option value="products">Product</option>
+                                            <option value="">Product</option>
 
                                         </select>
                                     </td>
@@ -142,7 +142,7 @@
                                     <td class="">
 
                                         <select class="form-control" id="method" name="method" value="{{old('method')}}" placeholder="Quantity">
-                                            <option value="Select KG">--Payment Method--</option>
+                                            <option value="">--Payment Method--</option>
                                             <option value="Cash">Cash</option>
                                             <option value="POS">POS</option>
                                             <option value="Transfer">Transfer</option>

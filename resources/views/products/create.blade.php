@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control category" id="category" name="category" value="{{old('method')}}" required>
-                            <option value="Select KG">Product Category</option>
+                            <option value="">Product Category</option>
                             @foreach ($categories as $category )
                             <option value="{{$category->id}}">{{$category->name}}</option>
 
