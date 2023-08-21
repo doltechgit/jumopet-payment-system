@@ -125,23 +125,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Get Product & Category Prices
+
         $product = Product::find($id);
-        $enduser = $product->categories[0];
-        $commercial = $product->categories[1];
-        $retailer = $product->categories[2];
-
-        // Update Product Name & Prices;
-        $product->update(['name' => $request->name]);
-        $enduser->update(['price'=> $request->end_user]);
-        $commercial->update(['price' => $request->commercial]);
-        $retailer->update(['price' => $request->retailer]);
-
-
+        $product->update($request->input());
         return back()->with('message', 'Product Updated succesfully');
-
-        
-
     }
 
     /**
@@ -152,6 +139,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return back()->with('message', 'Product Deleted succesfully');
     }
 }

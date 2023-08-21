@@ -22,24 +22,24 @@
                     <div class="form-group">
                         <tr>
                             <td>
-                                <label for="name">Price:</label>
+                                <label for="name">Slug:</label>
                             </td>
                             <td class="">
-                                <input class="form-control" name="contact" placeholder="+23412345678" value="{{$category->slug}}" />
+                                <input class="form-control" name="slug" placeholder="slug" value="{{$category->slug}}" />
                             </td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <td>
-                                <label for="name">Current Quantity:</label>
+                                <label for="name">Price:</label>
                             </td>
                             <td>
-                                <input class="form-control" name="email" placeholder="00" value="{{$category->price}}" />
+                                <input class="form-control" name="price" placeholder="00" value="{{$category->price}}" />
                             </td>
                         </tr>
                     </div>
-                    
+
                 </table>
 
                 <div class="form-group">

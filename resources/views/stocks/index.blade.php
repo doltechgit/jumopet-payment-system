@@ -3,7 +3,7 @@
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold">All Stocks</h6>
             <div>
-                <a href="/stocks/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm "><i class="fas fa-plus fa-sm text-white-50"></i> Restock</a>
+                <a href="/stocks/create" class=" btn btn-sm btn-primary shadow-sm "><i class="fas fa-plus fa-sm text-white-50"></i> Restock</a>
                 <div class="dropdown d-none d-sm-inline-block">
                     <button class=" btn btn-sm btn-success shadow-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-download fa-sm text-white-50"></i> Download Stock Inventory

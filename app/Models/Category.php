@@ -13,6 +13,9 @@ class Category extends Model
         'name',
         'slug',
         'price',
+        'refill',
+        'user_id',
+        'store_id'
     ];
 
     public function products()

@@ -38,7 +38,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Category::create([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'user_id' => auth()->user()->id,
+            'store_id' => auth()->user()->store->id
+        ]);
+
+        return back()->with('message', 'Product Category added successfully');
     }
 
     public function get_category($id)
@@ -95,7 +103,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $category->update($request->input());
+        return redirect('/categories')->with('message', 'Category Updated succesfully');
+
     }
 
     /**

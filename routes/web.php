@@ -104,10 +104,14 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
     Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::post('/products/store', [ProductController::class, 'store']);
     Route::post('/products/update/{id}', [ProductController::class, 'update']);
+    Route::get('/products/delete/{id}', [ProductController::class, 'destroy']);
+
 
     // Categories
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
+    Route::post('/categories/store', [CategoryController::class, 'store']);
+    Route::post('/categories/update/{id}', [CategoryController::class, 'update']);
     // Stocks
     Route::get('/stocks', [StockController::class, 'index']);
     Route::get('/stocks/create', [StockController::class, 'create']);

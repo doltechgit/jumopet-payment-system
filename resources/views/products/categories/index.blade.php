@@ -51,8 +51,9 @@
                         <tr>
 
                             <th>Name</th>
-                            <th>Price per unit (#)</th>
+                            <th>Price per unit (&#8358;)</th>
                             <th>Slug</th>
+                            <th>Refill</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -61,8 +62,9 @@
                         <tr>
 
                             <td><a href="/categories/{{$category->id}}">{{$category->name}}</a></td>
-                            <td>{{$category->price}}</td>
+                            <td>&#8358; {{number_format($category->price)}}</td>
                             <td>{{$category->slug}}</td>
+                            <td>{{$category->refill}}</td>
                             <td>
 
                                 <x-table-list-menu show="categories" delete="categories/delete" :id='$category->id' approve />

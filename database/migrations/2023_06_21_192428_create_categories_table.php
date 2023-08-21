@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->foreignId('store_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->float('refill')->nullable();
             $table->float('price');
             $table->timestamps();
         });

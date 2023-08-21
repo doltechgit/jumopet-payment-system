@@ -74,8 +74,8 @@ class TransactionController extends Controller
         $name = $request->name;
         $phone = $request->phone;
 
-        if($product->quantity == 0){
-            return back()->with('message', 'Restock, Product Quantity is low');
+        if($product->quantity == 0 || $product->quantity < 0 || $product->quantity < $request->buy_quantity){
+            return back()->with('error', 'Restock, Product Quantity is low');
         }
         if($name == ''){
             $name = 'User_'.rand(0, 1000).time();

@@ -4,7 +4,7 @@
             <h6>Edit Product</h6>
         </div>
         <div class="card-body">
-            <form method="POST" action="product/update/{{$product->id}}">
+            <form method="POST" action="products/update/{{$product->id}}">
                 @csrf
                 <table class="table table-borderless p-0 m-0">
 
@@ -25,7 +25,7 @@
                                 <label for="name">Price:</label>
                             </td>
                             <td class="">
-                                <input class="form-control" name="contact" placeholder="+23412345678" value="{{$product->price}}" />
+                                <input class="form-control" name="price" placeholder="+23412345678" value="{{$product->price}}" />
                             </td>
                         </tr>
                     </div>
@@ -35,7 +35,7 @@
                                 <label for="name">Current Quantity:</label>
                             </td>
                             <td>
-                                <input class="form-control" name="email" placeholder="00" value="{{$product->quantity}}" />
+                                <input class="form-control" name="quantity" placeholder="00" value="{{$product->quantity}}" />
                             </td>
                         </tr>
                     </div>
@@ -45,7 +45,7 @@
                                 <label for="name">Product Category:</label>
                             </td>
                             <td>
-                                   <select class="form-control category" id="category" name="category" value="{{old('category')}}" required>
+                                   <select class="form-control category" id="category" name="category_id" value="{{old('category')}}" required>
                                         <option value="$product->category->id">{{$product->category->name}}</option>
                                         @foreach ($categories as $category )
                                         <option value="{{$category->id}}">{{$category->name}}</option>
