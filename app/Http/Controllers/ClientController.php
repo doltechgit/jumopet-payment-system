@@ -28,6 +28,18 @@ class ClientController extends Controller
         ]);
     }
 
+    public function credit()
+    {
+
+        $creditors = Transaction::where('balance', '>', 0)->pluck('client_id');
+
+        $clients = Client::find($creditors);
+
+        return view('clients.credit', [
+            'clients' => $clients,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

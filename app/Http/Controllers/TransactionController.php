@@ -113,11 +113,11 @@ class TransactionController extends Controller
         $product->quantity = $updated_quantity;
         $product->save();
         Notification::send($users, new TransactionNotification($transaction->transaction_id));
-        // return redirect('transactions/'.$transaction->id)->with('message', 'Transaction Successful!');
-        return response()->json([
-            'status' => 200,
-            'redirect' => 'transactions/'.$transaction->id,
-        ]);
+        return redirect('transactions/'.$transaction->id)->with('message', 'Transaction Successful!');
+        // return response()->json([
+        //     'status' => 200,
+        //     'redirect' => 'transactions/'.$transaction->id,
+        // ]);
     }
 
     public function client_transaction(Request $request, $id)

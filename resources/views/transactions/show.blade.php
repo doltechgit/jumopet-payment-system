@@ -12,10 +12,16 @@
 
         }
     </style>
-    <div class="d-flex ">
+    <div class="d-flex flex-wrap">
         <div class="card col-lg-6 col-md-12 mx-2 border-0 p-4">
-            <div class="card-header border-0">
-                <h4 class="font-weight-bold">Transaction Details</h4>
+            <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
+                <h6 class="font-weight-bold">Transaction Details</h6>
+                <div>
+                    <!-- <a href="print_pdf/{{$transaction->id}}" class="btn btn-success  m-2"><i class="fa fa-print mx-2"></i>Print Invoice</a> -->
+                    <button id="print_receipt" class="btn btn-success btn-sm  m-2"><i class="fa fa-print mx-2"></i>Print Invoice</button>
+                    <a href="download_pdf/{{$transaction->id}}" class="btn btn-warning btn-sm m-2"><i class="fa fa-download mx-2"></i> Generate PDF</a>
+
+                </div>
             </div>
             <table class="table p-0 m-0">
                 <tr class="col-md-6 p-0">
@@ -115,9 +121,6 @@
             <div class="text-center">
                 <h2 class="font-weight-bold"> &#8358; {{number_format($transaction->price)}}</h2>
             </div>
-            <button id="print_receipt" class="btn btn-success  m-2"><i class="fa fa-print mx-2"></i>Print Invoice</button>
-            <a href="download_pdf/{{$transaction->id}}" class="btn btn-warning m-2"><i class="fa fa-download mx-2"></i> Generate PDF</a>
-
         </div>
     </div>
 
