@@ -49,9 +49,9 @@ class UserController extends Controller
         if (auth()->attempt($userData)) {
             $request->session()->regenerate();
             $user = User::find($request->id);
-            if(auth()->user()->roles->pluck('name')[0] == 'admin'){
-                return redirect('/admin');
-            }
+            // if(auth()->user()->roles->pluck('name')[0] == 'admin'){
+            //     return redirect('/admin');
+            // }
             return redirect('/')->with('message', 'You are logged in');
         }
         return back()->with('error', 'Invalid Credentials')->onlyInput('username');
