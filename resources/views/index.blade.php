@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <span class="col-lg-6 col-md-12 px-2">
                                         <div class="form-group">
-                                            <select class="form-control product" id="product" name="product" value="{{old('product')}}" required>
+                                            <select class="form-control product"  name="product" value="{{old('product')}}" required>
                                                 <option value="">Product</option>
                                                 @foreach ($products as $product )
                                                 <option value="{{$product->id}}">{{$product->name}}</option>

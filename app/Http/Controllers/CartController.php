@@ -44,12 +44,14 @@ class CartController extends Controller
     {
         $product = Product::find($request->product_id);
         $cart_check = Cart::where('product_id', $request->product_id)->count();
-        $carts = Cart::where('user_id', auth()->user()->id)->get();
-        $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
+        // $carts = Cart::where('user_id', auth()->user()->id)->get();
+        // $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
         if ($cart_check > 0) {
             $cart_product = Cart::where('product_id', $request->product_id)->first();
             
             if ($product->quantity < $request->quantity) {
+                $carts = Cart::where('user_id', auth()->user()->id)->get();
+                $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
                 return response()->json([
                     'status' => 200,
                     'carts' => $carts,
@@ -60,6 +62,8 @@ class CartController extends Controller
                 $unit_price = $cart_product->price / $cart_product->quantity;
                 $new_quantity = $cart_product->quantity + $request->quantity;
                 if ($product->quantity < $new_quantity) {
+                    $carts = Cart::where('user_id', auth()->user()->id)->get();
+                    $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
                     return response()->json([
                         'status' => 200,
                         'carts' => $carts,
@@ -70,6 +74,8 @@ class CartController extends Controller
                     $cart_product->quantity = $new_quantity;
                     $cart_product->price = $unit_price * $cart_product->quantity;
                     $cart_product->save();
+                    $carts = Cart::where('user_id', auth()->user()->id)->get();
+                    $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
                     return response()->json([
                         'status' => 200,
                         'carts' => $carts,
@@ -80,6 +86,8 @@ class CartController extends Controller
         } else {
             
             if ($product->quantity < $request->quantity) {
+                $carts = Cart::where('user_id', auth()->user()->id)->get();
+                $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
                 return response()->json([
                     'status' => 200,
                     'carts' => $carts,
@@ -96,6 +104,8 @@ class CartController extends Controller
                     'user_id' => auth()->user()->id
                 ]);
                 $cart->save();
+                $carts = Cart::where('user_id', auth()->user()->id)->get();
+                $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
                 return response()->json([
                     'status' => 200,
                     'carts' => $carts,

@@ -12,7 +12,7 @@
                 <input type="hidden" name="transaction_id" value="STK_{{rand(0, 1000).time()}}">
                 <input type="hidden" name="product_id" id="product_id">
                 <div class="form-group">
-                    <select class="form-control product" id="stk_product" name="product_id" value="{{old('product')}}" placeholder="Quantity">
+                    <select class="form-control" id="product" name="product_id" value="{{old('product')}}" placeholder="Quantity">
                         <option value="">--Select Product--</option>
                         @foreach ($products as $product )
                         <option value="{{$product->id}}">{{$product->name}}</option>

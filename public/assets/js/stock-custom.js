@@ -1,9 +1,10 @@
-const stk_product = $(".product");
+const stk_product = $("#product");
 const stk_quantity = $("#stk_quantity");
 const add_quantity = $("#add_quantity");
 const new_quantity = $("#new_quantity");
 
-stk_product.change(function () {
+stk_product.change(function (e) {
+e.preventDefault()
     add_quantity.val('')
     new_quantity.val('')
     $.ajax({

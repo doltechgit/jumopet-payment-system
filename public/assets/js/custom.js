@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    const prdouct_id = document.getElementById("product_id");
-    const buy_product = document.getElementById("buy_product");
-    const unit_price = $(".unit_price");
     const discount = $(".discount");
     const buy_quantity = $(".buy_quantity");
     const price = $(".buy_price");
@@ -11,47 +8,45 @@ $(document).ready(function () {
     const balance = $(".balance");
 
     const getCart = function (carts, cart_sum) {
-        if (cart_sum > 0) {
-            $(".cart").empty();
-            $(".empty_cart").empty()
-           
-            $.each(carts, function (i, item) {
-                $(".cart").append(
-                    "<div class='cart_item d-flex justify-content-between flex-wrap'><input type='hidden' class='cart_id' value=" +
-                        item.id +
-                        "><p>" +
-                        item.name +
-                        "</p><p>" +
-                        item.quantity +
-                        "</p><button class='clear_item btn btn-sm'><i class='fa fa-trash'></i></span></button></div>"
-                );
-            });
-            $(".clear_item").on("click", function (e) {
-                e.preventDefault();
+        $(".cart").empty();
+        $(".empty_cart").empty();
 
-                let cart_id = $(this).closest(".cart_item").find(".cart_id");
-                console.log(cart_id.val());
-                $.ajax({
-                    type: "GET",
-                    url: "/carts/delete/" + cart_id.val(),
-                    success: function (response) {
-                        let carts = response.carts;
-                        let cart_sum = response.cart_sum;
-                        getCart(carts, cart_sum);
-                        $(".cart_amount").text(cart_sum);
-                        price.val(cart_sum);
-                        price_display.text(
-                            new Intl.NumberFormat().format(price.val())
-                        );
-                        if (cart_sum < 0) {
-                            $(".cart_total").hide();
-                            $(".clear_cart").hide();
-                        } 
-                    },
-                });
-                $(this).closest(".cart_item").remove();
+        $.each(carts, function (i, item) {
+            $(".cart").append(
+                "<div class='cart_item d-flex justify-content-between flex-wrap'><input type='hidden' class='cart_id' value=" +
+                    item.id +
+                    "><p>" +
+                    item.name +
+                    "</p><p>" +
+                    item.quantity +
+                    "</p><button class='clear_item btn btn-sm'><i class='fa fa-trash'></i></span></button></div>"
+            );
+        });
+        $(".clear_item").on("click", function (e) {
+            e.preventDefault();
+
+            let cart_id = $(this).closest(".cart_item").find(".cart_id");
+            console.log(cart_id.val());
+            $.ajax({
+                type: "GET",
+                url: "/carts/delete/" + cart_id.val(),
+                success: function (response) {
+                    let carts = response.carts;
+                    let cart_sum = response.cart_sum;
+                    getCart(carts, cart_sum);
+                    $(".cart_amount").text(cart_sum);
+                    price.val(cart_sum);
+                    price_display.text(
+                        new Intl.NumberFormat().format(price.val())
+                    );
+                    if (cart_sum < 0) {
+                        $(".cart_total").hide();
+                        $(".clear_cart").hide();
+                    }
+                },
             });
-        }
+            $(this).closest(".cart_item").remove();
+        });
     };
 
     $.ajax({
@@ -67,54 +62,39 @@ $(document).ready(function () {
 
             if (cart_sum > 0) {
                 $(".cart_total").show();
-                 $(".clear_cart").show();
+                $(".clear_cart").show();
             }
         },
     });
 
-    $(".add_cart").on("click", function () {
+    $(".add_cart").on("click", function (e) {
+        e.preventDefault();
+        let cart_item = {
+            _token: $("#csrf_token")[0].content,
+            product_id: $(".product").val(),
+            quantity: $(".buy_quantity").val(),
+        };
         $.ajax({
-            type: "GET",
-            url: "/get_product/" + $(".product").val(),
-            success: function (response) {
-                const product = response.product;
-                console.log(product);
-                let cart_item = {
-                    _token: $("#csrf_token")[0].content,
-                    product_id: product.id,
-                    quantity: $(".buy_quantity").val(),
-                };
-                console.log(cart_item);
-                $.ajax({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
-                    },
-                    method: "POST",
-                    url: "/carts/store",
-                    data: cart_item,
-                    success: function (response) {
-                        let carts = response.carts;
-                        let cart_sum = response.cart_sum;
-                        getCart(carts, cart_sum);
-                        $(".cart_amount").text(cart_sum);
-                        price.val(cart_sum);
-                        price_display.text(
-                            new Intl.NumberFormat().format(price.val())
-                        );
-                        if (response.message) {
-                            alert(response.message);
-                        }
-                        if (cart_sum > 0) {
-                            $(".cart_total").show();
-                            $(".clear_cart").show();
-                        }
-                    },
-                });
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
-            error: function (xhr, status, error) {
-                console.log(error);
+            method: "POST",
+            url: "/carts/store",
+            data: cart_item,
+            success: function (response) {
+                let carts = response.carts;
+                let cart_sum = response.cart_sum;
+                getCart(carts, cart_sum);
+                $(".cart_amount").text(cart_sum);
+                price.val(cart_sum);
+                price_display.text(new Intl.NumberFormat().format(price.val()));
+                if (response.message) {
+                    alert(response.message);
+                }
+                if (cart_sum > 0) {
+                    $(".cart_total").show();
+                    $(".clear_cart").show();
+                }
             },
         });
     });
@@ -133,7 +113,7 @@ $(document).ready(function () {
                 price_display.text(new Intl.NumberFormat().format(price.val()));
                 console.log(response);
                 $(".clear_cart").hide();
-                $(".cart").empty()
+                $(".cart").empty();
             },
         });
     });
@@ -147,8 +127,6 @@ $(document).ready(function () {
         balance.val(parseFloat(price.val()) - parseFloat(paid.val()));
     });
 });
-
-$(document).ready(function () {});
 
 // Search Functionality
 $(document).ready(function () {
