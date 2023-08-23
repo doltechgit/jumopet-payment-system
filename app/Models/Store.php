@@ -38,11 +38,11 @@ class Store extends Model
 
     public function transactions()
     {
-        $this->hasMany(Transaction::class, 'store_id');
+       return $this->hasMany(Transaction::class, 'store_id');
     }
     public function stocks()
     {
-        $this->hasMany(Stock::class, 'store_id');
+        return $this->hasMany(Stock::class, 'store_id');
     }
     public function business()
     {

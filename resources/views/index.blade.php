@@ -53,7 +53,7 @@
                                         <span class="col-lg-10 col-md-12 ">
                                             <div class="form-group">
                                                 <!-- <label><small>Quantity</small></label> -->
-                                                <input class="form-control buy_quantity" type="number" step="any" name="buy_quantity" id="buy_quantity" placeholder="0 crates" value="{{old('buy_quantity')}}" />
+                                                <input class="form-control buy_quantity" type="number" step="any" name="buy_quantity" id="buy_quantity" placeholder="0 crates" value="{{ old('buy_quantity') == null ? 1 : old('buy_quantity') }}" />
                                                 @error('quantity')
                                                 <small class="text-danger">{{$message}}</small>
                                                 @enderror
@@ -135,17 +135,31 @@
             <div class="cart-area mb-4">
                 <div class="d-flex justify-content-between">
                     <h5 class="font-weight-bold">Cart</h5>
-                    <button class="btn btn-sm btn-danger clear_cart">Empty Cart</button>
+                    <button class="btn btn-sm btn-danger clear_cart" style="display: none;">Empty Cart</button>
                 </div>
 
                 <hr>
                 <div class="cart">
                     <p class="empty_cart">Cart is Empty</p>
                 </div>
-                <div>
-                    <h6>Total</h6> <span class="cart_total">0</span>
+                <div class="cart_total " style="display: none;">
+                    <h6>Total</h6> <span class="cart_amount">0</span>
                 </div>
 
+            </div>
+            <div class="  my-4">
+                <small>RGB Refill Details</small>
+                <hr>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <div class="col-lg-6 col-md-12">
+                        <small>Filled</small>
+                        <h5>0</h5>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <small>Empty</small>
+                        <h5>{{$rgb->quantity}}</h5>
+                    </div>
+                </div>
             </div>
             <div class="  my-4">
                 <small>Product Prices</small>
@@ -159,6 +173,8 @@
                     @endforeach
                 </div>
             </div>
+
+
 
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\StockExport;
+use App\Models\CurrentStock;
 use App\Models\Product;
 use App\Models\Stock;
 use Maatwebsite\Excel\Facades\Excel;
@@ -44,8 +45,8 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::where('quantity', $request->product)->first();
-        
+        $product = Product::find($request->product_id);
+
         $request->validate([
             'quantity' => 'numeric'
         ]);
@@ -60,6 +61,11 @@ class StockController extends Controller
         $stock->save();
         $product->quantity = $stock->new_quantity;
         $product->save();
+        $rgb = CurrentStock::find(1);
+        if (strpos($product->category->slug, 'rgb') === 0) {
+            $rgb->quantity = $rgb->quantity - $stock->add_quantity;
+            $rgb->save();
+        }
 
         return back()->with('message', 'Success! Product Stock updated.');
     }

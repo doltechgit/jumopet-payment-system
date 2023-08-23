@@ -9,12 +9,12 @@ $(document).ready(function () {
     const category = $(".product");
     const paid = $(".paid");
     const balance = $(".balance");
-    const cart_total = [];
 
-    const getCart = function (carts) {
-        if (carts) {
+    const getCart = function (carts, cart_sum) {
+        if (cart_sum > 0) {
             $(".cart").empty();
-            $(".empty_cart").empty();
+            $(".empty_cart").empty()
+           
             $.each(carts, function (i, item) {
                 $(".cart").append(
                     "<div class='cart_item d-flex justify-content-between flex-wrap'><input type='hidden' class='cart_id' value=" +
@@ -23,7 +23,7 @@ $(document).ready(function () {
                         item.name +
                         "</p><p>" +
                         item.quantity +
-                        "</p><button class='clear_item'><i class='fa fa-trash'></i></span></button></div>"
+                        "</p><button class='clear_item btn btn-sm'><i class='fa fa-trash'></i></span></button></div>"
                 );
             });
             $(".clear_item").on("click", function (e) {
@@ -37,11 +37,16 @@ $(document).ready(function () {
                     success: function (response) {
                         let carts = response.carts;
                         let cart_sum = response.cart_sum;
-                        getCart(carts);
+                        getCart(carts, cart_sum);
+                        $(".cart_amount").text(cart_sum);
                         price.val(cart_sum);
                         price_display.text(
                             new Intl.NumberFormat().format(price.val())
                         );
+                        if (cart_sum < 0) {
+                            $(".cart_total").hide();
+                            $(".clear_cart").hide();
+                        } 
                     },
                 });
                 $(this).closest(".cart_item").remove();
@@ -55,9 +60,15 @@ $(document).ready(function () {
         success: function (response) {
             let carts = response.carts;
             let cart_sum = response.cart_sum;
-            getCart(carts);
+            getCart(carts, cart_sum);
+            $(".cart_amount").text(cart_sum);
             price.val(cart_sum);
             price_display.text(new Intl.NumberFormat().format(price.val()));
+
+            if (cart_sum > 0) {
+                $(".cart_total").show();
+                 $(".clear_cart").show();
+            }
         },
     });
 
@@ -84,13 +95,21 @@ $(document).ready(function () {
                     url: "/carts/store",
                     data: cart_item,
                     success: function (response) {
-                        let carts = response.carts
-                         let cart_sum = response.cart_sum;
-                         getCart(carts);
-                         price.val(cart_sum);
-                         price_display.text(
-                             new Intl.NumberFormat().format(price.val())
-                         );
+                        let carts = response.carts;
+                        let cart_sum = response.cart_sum;
+                        getCart(carts, cart_sum);
+                        $(".cart_amount").text(cart_sum);
+                        price.val(cart_sum);
+                        price_display.text(
+                            new Intl.NumberFormat().format(price.val())
+                        );
+                        if (response.message) {
+                            alert(response.message);
+                        }
+                        if (cart_sum > 0) {
+                            $(".cart_total").show();
+                            $(".clear_cart").show();
+                        }
                     },
                 });
             },
@@ -100,21 +119,24 @@ $(document).ready(function () {
         });
     });
 
-    $('.clear_cart').on('click', function () {
-// console.log('clear')
+    $(".clear_cart").on("click", function () {
+        // console.log('clear')
         $.ajax({
-            type: 'GET',
-            url: '/clear_cart',
+            type: "GET",
+            url: "/clear_cart",
             success: function (response) {
-                let carts = response.carts
+                let carts = response.carts;
                 let cart_sum = response.cart_sum;
-                getCart(carts)
+                getCart(carts);
+                $(".cart_amount").text(cart_sum);
                 price.val(cart_sum);
                 price_display.text(new Intl.NumberFormat().format(price.val()));
-                console.log(response)
-            }
-        })
-    })
+                console.log(response);
+                $(".clear_cart").hide();
+                $(".cart").empty()
+            },
+        });
+    });
 
     discount.change(function () {
         price.val(parseFloat(price.val()) - parseFloat(discount.val()));

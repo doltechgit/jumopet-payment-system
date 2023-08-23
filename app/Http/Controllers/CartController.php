@@ -42,39 +42,67 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        $product = Product::find($request->product_id);
         $cart_check = Cart::where('product_id', $request->product_id)->count();
-        if($cart_check > 0){
+        $carts = Cart::where('user_id', auth()->user()->id)->get();
+        $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
+        if ($cart_check > 0) {
             $cart_product = Cart::where('product_id', $request->product_id)->first();
-            $unit_price = $cart_product->price / $cart_product->quantity;
-            $cart_product->quantity = $cart_product->quantity + $request->quantity;
-            $cart_product->price = $unit_price * $cart_product->quantity;
-            $cart_product->save();
-            $carts = Cart::all();
-            $cart_sum = Cart::all()->sum('price');
-            return response()->json([
-                'status' => 200,
-                'carts' => $carts,
-                'cart_sum' => $cart_sum
-            ]);
-        }else{
-            $product = Product::find($request->product_id);
-            $cart = Cart::create([
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-                'name' => $product->name,
-                'unit_price' => $product->price,
-                'price' => $product->price * $request->quantity
-            ]);
-            $cart->save();
-            $carts = Cart::all();
-            $cart_sum = Cart::all()->sum('price');
-            return response()->json([
-                'status' => 200,
-                'carts' => $carts,
-                'cart_sum' => $cart_sum
-            ]);
+            
+            if ($product->quantity < $request->quantity) {
+                return response()->json([
+                    'status' => 200,
+                    'carts' => $carts,
+                    'cart_sum' => $cart_sum,
+                    'message' => 'Product quantity is low, Restock!'
+                ]);
+            } else {
+                $unit_price = $cart_product->price / $cart_product->quantity;
+                $new_quantity = $cart_product->quantity + $request->quantity;
+                if ($product->quantity < $new_quantity) {
+                    return response()->json([
+                        'status' => 200,
+                        'carts' => $carts,
+                        'cart_sum' => $cart_sum,
+                        'message' => 'Product quantity is low, Restock!'
+                    ]);
+                } else {
+                    $cart_product->quantity = $new_quantity;
+                    $cart_product->price = $unit_price * $cart_product->quantity;
+                    $cart_product->save();
+                    return response()->json([
+                        'status' => 200,
+                        'carts' => $carts,
+                        'cart_sum' => $cart_sum
+                    ]);
+                }
+            }
+        } else {
+            
+            if ($product->quantity < $request->quantity) {
+                return response()->json([
+                    'status' => 200,
+                    'carts' => $carts,
+                    'cart_sum' => $cart_sum,
+                    'message' => 'Product quantity is low, Restock!'
+                ]);
+            } else {
+                $cart = Cart::create([
+                    'product_id' => $request->product_id,
+                    'quantity' => $request->quantity,
+                    'name' => $product->name,
+                    'unit_price' => $product->price,
+                    'price' => $product->price * $request->quantity,
+                    'user_id' => auth()->user()->id
+                ]);
+                $cart->save();
+                return response()->json([
+                    'status' => 200,
+                    'carts' => $carts,
+                    'cart_sum' => $cart_sum
+                ]);
+            }
         }
-       
     }
 
     /**
@@ -134,7 +162,7 @@ class CartController extends Controller
 
     public function clear_cart()
     {
-        \App\Models\Cart::query()->delete();
+        \App\Models\Cart::where('user_id', auth()->user()->id)->delete();
 
         $carts = Cart::all();
         $cart_sum = Cart::all()->sum('price');

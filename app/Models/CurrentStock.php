@@ -10,4 +10,9 @@ class CurrentStock extends Model
     use HasFactory;
 
     protected $table = 'current_stocks';
+    protected $fillable = [
+        'quantity',
+        
+
+    ];
 }
