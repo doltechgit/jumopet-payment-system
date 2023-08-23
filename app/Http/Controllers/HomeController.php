@@ -21,15 +21,13 @@ class HomeController extends Controller
         $latest_transaction = Transaction::latest()->first();
         $categories = Category::all();
         $prev_date = date('Y-m-d', time() - 60 * 60 * 24);
-        $yest_price = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('price');
-        $yest_quantity = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('quantity');
+        // $yest_price = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('price');
+        // $yest_quantity = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('quantity');
         
         return view('index', [
             'products' => $products,
             'transactions' => $transactions,
             'latest_transaction' => $latest_transaction,
-            'yest_price' => $yest_price,
-            'yest_quantity' => $yest_quantity,
             'categories' => $categories,
             'clients' => $clients
         ]);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,12 @@ Route::middleware('auth')->group(function(){
     Route::get('/print_pdf/{id}', [TransactionController::class, 'receipt_pdf']);
     Route::get('/download_pdf/{id}', [TransactionController::class, 'download_pdf']);
     Route::get('/export', [TransactionController::class, 'export']);
+
+    //Carts
+    Route::get('/carts', [CartController::class, 'index']);
+    Route::post('/carts/store', [CartController::class, 'store']);
+    Route::get('/carts/delete/{id}', [CartController::class, 'destroy']);
+    Route::get('/clear_cart', [CartController::class, 'clear_cart']);
 
     // Clients
     Route::get('/clients', [ClientController::class, 'index']);

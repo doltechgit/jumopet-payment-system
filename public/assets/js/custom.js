@@ -1,9 +1,7 @@
 $(document).ready(function () {
-    // Transcation
     const prdouct_id = document.getElementById("product_id");
     const buy_product = document.getElementById("buy_product");
     const unit_price = $(".unit_price");
-    const disc_est = $(".disc_est");
     const discount = $(".discount");
     const buy_quantity = $(".buy_quantity");
     const price = $(".buy_price");
@@ -11,95 +9,128 @@ $(document).ready(function () {
     const category = $(".product");
     const paid = $(".paid");
     const balance = $(".balance");
-    const amount = $(".amount");
+    const cart_total = [];
 
-    category.change(function () {
+    const getCart = function (carts) {
+        if (carts) {
+            $(".cart").empty();
+            $(".empty_cart").empty();
+            $.each(carts, function (i, item) {
+                $(".cart").append(
+                    "<div class='cart_item d-flex justify-content-between flex-wrap'><input type='hidden' class='cart_id' value=" +
+                        item.id +
+                        "><p>" +
+                        item.name +
+                        "</p><p>" +
+                        item.quantity +
+                        "</p><button class='clear_item'><i class='fa fa-trash'></i></span></button></div>"
+                );
+            });
+            $(".clear_item").on("click", function (e) {
+                e.preventDefault();
+
+                let cart_id = $(this).closest(".cart_item").find(".cart_id");
+                console.log(cart_id.val());
+                $.ajax({
+                    type: "GET",
+                    url: "/carts/delete/" + cart_id.val(),
+                    success: function (response) {
+                        let carts = response.carts;
+                        let cart_sum = response.cart_sum;
+                        getCart(carts);
+                        price.val(cart_sum);
+                        price_display.text(
+                            new Intl.NumberFormat().format(price.val())
+                        );
+                    },
+                });
+                $(this).closest(".cart_item").remove();
+            });
+        }
+    };
+
+    $.ajax({
+        type: "GET",
+        url: "/carts/",
+        success: function (response) {
+            let carts = response.carts;
+            let cart_sum = response.cart_sum;
+            getCart(carts);
+            price.val(cart_sum);
+            price_display.text(new Intl.NumberFormat().format(price.val()));
+        },
+    });
+
+    $(".add_cart").on("click", function () {
         $.ajax({
             type: "GET",
-            url: "/get_product/" + category.val(),
+            url: "/get_product/" + $(".product").val(),
             success: function (response) {
                 const product = response.product;
                 console.log(product);
-                unit_price.val(product.price);
+                let cart_item = {
+                    _token: $("#csrf_token")[0].content,
+                    product_id: product.id,
+                    quantity: $(".buy_quantity").val(),
+                };
+                console.log(cart_item);
+                $.ajax({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    method: "POST",
+                    url: "/carts/store",
+                    data: cart_item,
+                    success: function (response) {
+                        let carts = response.carts
+                         let cart_sum = response.cart_sum;
+                         getCart(carts);
+                         price.val(cart_sum);
+                         price_display.text(
+                             new Intl.NumberFormat().format(price.val())
+                         );
+                    },
+                });
             },
             error: function (xhr, status, error) {
                 console.log(error);
             },
         });
-console.log(unit_price.val())
-        if (buy_quantity.val() > 0 || disc_est.val() > 0) {
-            
-            const total_price =
-                parseFloat(buy_quantity.val()) * parseFloat(unit_price.val());
-
-            const discount_price =
-                parseFloat(buy_quantity.val()) *
-                parseFloat(unit_price.val()) *
-                disc_est.val();
-
-            price.val(total_price - discount_price);
-            price_display.text(new Intl.NumberFormat().format(price.val()));
-        } else if (buy_quantity.val() > 0) {
-           
-            price.val(
-                parseFloat(buy_quantity.val()) * parseFloat(unit_price.val())
-            );
-            price_display.text(new Intl.NumberFormat().format(price.val()));
-        }
     });
+
+    $('.clear_cart').on('click', function () {
+// console.log('clear')
+        $.ajax({
+            type: 'GET',
+            url: '/clear_cart',
+            success: function (response) {
+                let carts = response.carts
+                let cart_sum = response.cart_sum;
+                getCart(carts)
+                price.val(cart_sum);
+                price_display.text(new Intl.NumberFormat().format(price.val()));
+                console.log(response)
+            }
+        })
+    })
+
     discount.change(function () {
-        disc_est.val(parseFloat(discount.val()) / 100);
-        const total_price =
-            parseFloat(buy_quantity.val()) * parseFloat(unit_price.val());
-
-        const discount_price =
-            parseFloat(buy_quantity.val()) *
-            parseFloat(unit_price.val()) *
-            disc_est.val();
-
-        price.val(total_price - discount_price);
+        price.val(parseFloat(price.val()) - parseFloat(discount.val()));
+        console.log(price.val());
         price_display.text(new Intl.NumberFormat().format(price.val()));
     });
-    const quantityChange = function () {
-       
-        if (disc_est.val() > 0) {
-            const total_price =
-                parseFloat(buy_quantity.val()) * parseFloat(unit_price.val());
-
-            const discount_price =
-                parseFloat(buy_quantity.val()) *
-                parseFloat(unit_price.val()) *
-                disc_est.val();
-            price.val(total_price - discount_price);
-            price_display.text(price.val());
-        } else if (parseFloat(category.val()) > 0) {
-            price.val(
-                parseFloat(buy_quantity.val()) * parseFloat(unit_price.val())
-            );
-            price_display.text(new Intl.NumberFormat().format(price.val()));
-        } else {
-            price.val(
-                parseFloat(buy_quantity.val()) * parseFloat(unit_price.val())
-            );
-            price_display.text(new Intl.NumberFormat().format(price.val()));
-        }
-    };
-    buy_quantity.change(quantityChange);
     paid.change(function () {
         balance.val(parseFloat(price.val()) - parseFloat(paid.val()));
     });
-
-    amount.change(function () {
-        buy_quantity.val(parseFloat(amount.val()) / parseFloat(unit_price.val()));
-        price.val(parseFloat(buy_quantity.val()) * parseFloat(unit_price.val()));
-        price_display.text(new Intl.NumberFormat().format(price.val()));
-    });
 });
 
+$(document).ready(function () {});
+
+// Search Functionality
 $(document).ready(function () {
-    // Search Functionality
     $(".navbar-search").on("submit", function (e) {
-        // alert('heere')
         e.preventDefault();
         let query = $(".search_query").val();
         if (!query) {
@@ -141,6 +172,7 @@ $(document).ready(function () {
     });
 });
 
+// Transaction Confirmation
 // $(document).ready(function () {
 //     $(".transaction_form").on("submit", function (e) {
 //         e.preventDefault();
@@ -178,50 +210,48 @@ $(document).ready(function () {
 //     });
 // });
 
-$(document).ready(function () {
-    $(".category").change(function () {
-        $('.product').empty()
-        const ctg = $(".category").val();
-        $.ajax({
-            type: "GET",
-            url: "/get_category/" + ctg,
-            success: function (response) {
-                const products = response.products;
-                console.log(products);
-                $(".product").append(
-                    "<option value=''>Select Product</option>"
-                );
-                $.each(products, function (i, item) {
-                    $(".product").append(
-                        "<option value=" +
-                            item.id +
-                        ">" + item.name + "</option>"
-                    );
-                });
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-                $(".product").html(
-                    "<option value=" +
-                        error +
-                        ">" +
-                        error +
-                        "</option>"
-                );
-            },
-        });
-    });
-});
+// $(document).ready(function () {
+//     $(".category").change(function () {
+//         $('.product').empty()
+//         const ctg = $(".category").val();
+//         $.ajax({
+//             type: "GET",
+//             url: "/get_category/" + ctg,
+//             success: function (response) {
+//                 const products = response.products;
+//                 console.log(products);
+//                 $(".product").append(
+//                     "<option value=''>Select Product</option>"
+//                 );
+//                 $.each(products, function (i, item) {
+//                     $(".product").append(
+//                         "<option value=" +
+//                             item.id +
+//                         ">" + item.name + "</option>"
+//                     );
+//                 });
+//             },
+//             error: function (xhr, status, error) {
+//                 console.log(error);
+//                 $(".product").html(
+//                     "<option value=" +
+//                         error +
+//                         ">" +
+//                         error +
+//                         "</option>"
+//                 );
+//             },
+//         });
+//     });
+// });
 
+// Alert Pop-up
 $(document).ready(function () {
-    // $('.custom-alert').delay(4000).slideUp(500, function () {
-    //     $(".custom-alert").fadeTo(2000, 0)
-    // })
     $(".custom-alert").delay(4000).fadeTo(4000, 0);
 });
 
+//  Client Transaction Pop Up Functionality
 // $(document).ready(function () {
-//     Client Transaction Pop Up Functionality
 //     $(".new_transaction").on("click", function () {
 //         $("#transactionModal").modal("show");
 //         let trans_id = $(this).val();

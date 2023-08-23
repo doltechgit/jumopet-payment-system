@@ -23,29 +23,48 @@
 
                 </div>
             </div>
+            <h5>Order Summary</h5>
+            <table class="table">
+                <tr>
+                    <th>Product</th>
+                    <th>Price per unit</th>
+                    <th>Quantity</th>
+                </tr>
+
+                @foreach ($orders as $order )
+                <tr>
+                    <td>{{$order->product->name}}</td>
+                    <td>{{$order->product->price}}</td>
+                    <td>{{$order->quantity}}</td>
+                </tr>
+                @endforeach
+
+
+            </table>
             <table class="table p-0 m-0">
                 <tr class="col-md-6 p-0">
                     <td>ID: {{$transaction->transaction_id}}</td>
                     <td>Date: {{$transaction->created_at}}</td>
                 </tr>
-                <tr class="col-md-6">
+                <tr class="c">
                     <td>Name: <a href="clients/{{$transaction->client->id}}">{{$transaction->client->name}}</a></td>
                     <td>Phone: {{$transaction->client->phone}} </td>
                 </tr>
-                <tr class="col-md-6">
-                    <td>Quantity: {{$transaction->quantity}} KG </td>
+                <tr class="">
                     <td>Payment Method: {{$transaction->pay_method}}</td>
+                    <td>Discount: &#8358; {{$transaction->discount}} </td>
                 </tr>
-                <tr>
-                    <td>Discount: {{$transaction->discount}} %</td>
-                    <td>Transaction by: {{$transaction->user->name}}</td>
-                </tr>
+
                 <tr>
                     <td>Paid: &#8358; {{number_format($transaction->paid)}}</td>
                     <td>
                         Balance: &#8358; {{number_format($transaction->balance)}}
                         <!-- <a href="#">Pay Balance</a> -->
                     </td>
+                </tr>
+                <tr>
+                    <td>Transaction by: {{$transaction->user->name}}</td>
+                    <td></td>
                 </tr>
             </table>
             @if($transaction->balance > 0)
@@ -74,6 +93,24 @@
                 <small class="fs-3">{{auth()->user()->store->address}}</small>
                 <h5>Transaction Receipt</h5>
             </div>
+            <h6>Order Summary</h6>
+            <table class="table">
+                <tr>
+                    <th>Product</th>
+                    <th>Price per unit</th>
+                    <th>Quantity</th>
+                </tr>
+
+                @foreach ($orders as $order )
+                <tr>
+                    <td>{{$order->product->name}}</td>
+                    <td>{{$order->product->price}}</td>
+                    <td>{{$order->quantity}}</td>
+                </tr>
+                @endforeach
+
+
+            </table>
             <table class="table">
                 <tr>
                     <td>ID: </td>
@@ -92,10 +129,6 @@
                     <td>{{$transaction->client->phone}} </td>
                 </tr>
                 <tr>
-                    <td>Quantity: </td>
-                    <td>{{$transaction->quantity}} KG </td>
-                </tr>
-                <tr>
                     <td>Payment Method: </td>
                     <td>{{$transaction->pay_method}}</td>
                 </tr>
@@ -109,7 +142,7 @@
                 </tr>
                 <tr>
                     <td>Discount: </td>
-                    <td>{{$transaction->discount}} %</td>
+                    <td>&#8358; {{$transaction->discount}} %</td>
                 </tr>
                 <tr>
                     <td>Transaction by: </td>
