@@ -162,7 +162,7 @@
         $(document).ready(function() {
             $('#print_receipt').on('click', function() {
                 let content = $("#print_area")
-                let win_print = window.open('', '', 'width=302', 'height=450')
+                let win_print = window.open('', '', 'width=302', 'height=350')
                 win_print.document.write(content.html())
                 win_print.document.close()
                 win_print.print()
