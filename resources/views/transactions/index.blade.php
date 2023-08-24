@@ -21,6 +21,10 @@
                             <small>Outstanding</small>
                             <h5>&#8358;{{number_format($balance)}}</h5>
                         </div>
+                        <div class="mx-3">
+                            <small>Total Amount</small>
+                            <h5>&#8358;{{number_format($total)}}</h5>
+                        </div>
                     </div>
                 </div>
                 <div class="my-2">

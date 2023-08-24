@@ -35,6 +35,7 @@ class TransactionController extends Controller
         $discount = Transaction::all()->sum('discount');
         $balance =  Transaction::all()->sum('balance');
         $paid = Transaction::all()->sum('paid');
+        $total = Transaction::all()->sum('price');
         $today = date('Y-m-d', time());
         $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
             ->where('pay_method', 'pos')->sum('price');
@@ -52,6 +53,7 @@ class TransactionController extends Controller
                 'discount' => $discount,
                 'paid' => $paid,
                 'balance' => $balance,
+                'total' => $total,
                 'transfer' => $transfer,
                 'cash_today' => $cash_today,
                 'pos_today' => $pos_today,
@@ -63,6 +65,10 @@ class TransactionController extends Controller
                 'transactions' => auth()->user()->store->transactions,
                 'cash' => $cash,
                 'pos' => $pos,
+                'discount' => $discount,
+                'paid' => $paid,
+                'balance' => $balance,
+                'total' => $total,
                 'transfer' => $transfer,
                 'cash_today' => $cash_today,
                 'pos_today' => $pos_today,
