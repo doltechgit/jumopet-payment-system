@@ -12,10 +12,10 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Store</th>
+                        <th>Address</th>
                         <th>Email</th>
-                        <th>Username</th>
-                        <th>Role</th>
+                        <th>Contact</th>
                     </tr>
                 </thead>
                 <tbody>

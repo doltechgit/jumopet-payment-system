@@ -91,6 +91,7 @@
             <div class="card-header text-center border-0" style="text-align: center">
                 <h2 class="text-uppercase h3 font-weight-bold my0" style="line-height: 10px;">Jumopet Store</h2>
                 <small class="fs-3">{{auth()->user()->store->address}}</small>
+                <small class="fs-3">{{auth()->user()->store->contact}}</small>
                 <h5>Transaction Receipt</h5>
             </div>
 
