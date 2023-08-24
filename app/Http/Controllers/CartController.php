@@ -48,7 +48,6 @@ class CartController extends Controller
         // $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
         if ($cart_check > 0) {
             $cart_product = Cart::where('product_id', $request->product_id)->first();
-            
             if ($product->quantity < $request->quantity) {
                 $carts = Cart::where('user_id', auth()->user()->id)->get();
                 $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
@@ -84,7 +83,7 @@ class CartController extends Controller
                 }
             }
         } else {
-            
+
             if ($product->quantity < $request->quantity) {
                 $carts = Cart::where('user_id', auth()->user()->id)->get();
                 $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
@@ -135,6 +134,8 @@ class CartController extends Controller
     public function edit($id)
     {
         //
+
+
     }
 
     /**
@@ -146,7 +147,30 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cart_item = Cart::find($id);
+        $product = Product::find($cart_item->product_id);
+        if ($product->quantity < $request->quantity) {
+            $carts = Cart::where('user_id', auth()->user()->id)->get();
+            $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
+            return response()->json([
+                'status' => 200,
+                'carts' => $carts,
+                'cart_sum' => $cart_sum,
+                'message' => 'Product quantity is low, Restock!'
+            ]);
+        } else {
+            $unit_price = $cart_item->price / $cart_item->quantity;
+            $cart_item->quantity = $request->quantity;
+            $cart_item->price = $unit_price * $cart_item->quantity;
+            $cart_item->save();
+            $carts = Cart::where('user_id', auth()->user()->id)->get();
+            $cart_sum = Cart::where('user_id', auth()->user()->id)->sum('price');
+            return response()->json([
+                'status' => 200,
+                'carts' => $carts,
+                'cart_sum' => $cart_sum
+            ]);
+        }
     }
 
     /**

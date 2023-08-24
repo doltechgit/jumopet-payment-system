@@ -8,45 +8,104 @@ $(document).ready(function () {
     const balance = $(".balance");
 
     const getCart = function (carts, cart_sum) {
-        $(".cart").empty();
-        $(".empty_cart").empty();
+        if (cart_sum > 0) {
+            $(".cart").empty();
+            $(".empty_cart").empty();
 
-        $.each(carts, function (i, item) {
-            $(".cart").append(
-                "<div class='cart_item d-flex justify-content-between flex-wrap'><input type='hidden' class='cart_id' value=" +
-                    item.id +
-                    "><p>" +
-                    item.name +
-                    "</p><p>" +
-                    item.quantity +
-                    "</p><button class='clear_item btn btn-sm'><i class='fa fa-trash'></i></span></button></div>"
-            );
-        });
-        $(".clear_item").on("click", function (e) {
-            e.preventDefault();
-
-            let cart_id = $(this).closest(".cart_item").find(".cart_id");
-            console.log(cart_id.val());
-            $.ajax({
-                type: "GET",
-                url: "/carts/delete/" + cart_id.val(),
-                success: function (response) {
-                    let carts = response.carts;
-                    let cart_sum = response.cart_sum;
-                    getCart(carts, cart_sum);
-                    $(".cart_amount").text(cart_sum);
-                    price.val(cart_sum);
-                    price_display.text(
-                        new Intl.NumberFormat().format(price.val())
-                    );
-                    if (cart_sum < 0) {
-                        $(".cart_total").hide();
-                        $(".clear_cart").hide();
-                    }
-                },
+            $.each(carts, function (i, item) {
+                $(".cart").append(
+                    "<div class='cart_item d-flex align-items-center my-2'><input type='hidden' class='cart_id' value=" +
+                        item.id +
+                        "><p class='col-md-8 px-0'>" +
+                        item.name +
+                        "</p><input type='number' class='w-25 form-control text-center item_quantity' value=" +
+                        item.quantity +
+                        "><button class='clear_item btn btn-sm'><i class='fa fa-trash'></i></span></button></div>"
+                );
             });
-            $(this).closest(".cart_item").remove();
-        });
+            $(".clear_item").on("click", function (e) {
+                e.preventDefault();
+
+                let cart_id = $(this).closest(".cart_item").find(".cart_id");
+                console.log(cart_id.val());
+                $.ajax({
+                    type: "GET",
+                    url: "/carts/delete/" + cart_id.val(),
+                    success: function (response) {
+                        let carts = response.carts;
+                        let cart_sum = response.cart_sum;
+
+                        getCart(carts, cart_sum);
+                        $(".cart_amount").text(cart_sum);
+                        price.val(cart_sum);
+                        price_display.text(
+                            new Intl.NumberFormat().format(price.val())
+                        );
+                    },
+                });
+                $(this).closest(".cart_item").remove();
+            });
+
+            // $(".minus_quantity").on("click", function () {
+            //     let item_quantity = $(this)
+            //         .closest(".cart_item")
+            //         .find(".item_quantity");
+            //     console.log(item_quantity.val());
+
+            //     if (item_quantity.val() <= 0) {
+            //         item_quantity.val();
+            //     } else {
+            //         item_quantity.val(item_quantity.val() - 1);
+            //     }
+            // });
+            // $(".plus_quantity").on("click", function () {
+            //     let item_quantity = $(this)
+            //         .closest(".cart_item")
+            //         .find(".item_quantity");
+            //     console.log(item_quantity.val());
+            //     item_quantity.val(item_quantity.val()+ 1 );
+            // });
+
+            $(".item_quantity").change(function () {
+                let cart_id = $(this).closest(".cart_item").find(".cart_id");
+                console.log(cart_id.val());
+                let cart_item = {
+                    _token: $("#csrf_token")[0].content,
+                    quantity: $(this).val(),
+                };
+                $.ajax({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    method: "POST",
+                    url: "/carts/update/" + cart_id.val(),
+                    data: cart_item,
+                    success: function (response) {
+                        let carts = response.carts;
+                        let cart_sum = response.cart_sum;
+                        getCart(carts, cart_sum);
+                        $(".cart_amount").text(cart_sum);
+                        price.val(cart_sum);
+                        price_display.text(
+                            new Intl.NumberFormat().format(price.val())
+                        );
+                        if (response.message) {
+                            alert(response.message);
+                        }
+                        if (cart_sum > 0) {
+                            $(".cart_total").show();
+                            $(".clear_cart").show();
+                        }
+                    },
+                });
+            });
+        } else if (cart_sum <= 0) {
+            $(".cart_total").hide();
+            $(".clear_cart").hide();
+            $(".cart").append("<p class='empty_cart'>Cart is Empty</p>");
+        }
     };
 
     $.ajax({
@@ -100,7 +159,6 @@ $(document).ready(function () {
     });
 
     $(".clear_cart").on("click", function () {
-        // console.log('clear')
         $.ajax({
             type: "GET",
             url: "/clear_cart",
@@ -113,7 +171,9 @@ $(document).ready(function () {
                 price_display.text(new Intl.NumberFormat().format(price.val()));
                 console.log(response);
                 $(".clear_cart").hide();
+                $(".cart_total").hide();
                 $(".cart").empty();
+                $(".cart").append("<p class='empty_cart'>Cart is Empty</p>");
             },
         });
     });

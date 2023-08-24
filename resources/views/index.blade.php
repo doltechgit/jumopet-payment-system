@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <span class="col-lg-6 col-md-12 px-2">
                                         <div class="form-group">
-                                            <select class="form-control product"  name="product" value="{{old('product')}}" required>
+                                            <select class="form-control product" name="product" value="{{old('product')}}">
                                                 <option value="">Product</option>
                                                 @foreach ($products as $product )
                                                 <option value="{{$product->id}}">{{$product->name}}</option>
@@ -49,8 +49,8 @@
                                             </select>
                                         </div>
                                     </span>
-                                    <div class="col-lg-6 row">
-                                        <span class="col-lg-10 col-md-12 ">
+                                    <div class="col-lg-6 d-flex justify-content-between px-0">
+                                        <span class="col-lg-10 col-md-12">
                                             <div class="form-group">
                                                 <!-- <label><small>Quantity</small></label> -->
                                                 <input class="form-control buy_quantity" type="number" step="any" name="buy_quantity" id="buy_quantity" placeholder="0 crates" value="{{ old('buy_quantity') == null ? 1 : old('buy_quantity') }}" />
@@ -140,7 +140,7 @@
 
                 <hr>
                 <div class="cart">
-                    <p class="empty_cart">Cart is Empty</p>
+                    
                 </div>
                 <div class="cart_total " style="display: none;">
                     <h6>Total</h6> <span class="cart_amount">0</span>
@@ -150,7 +150,7 @@
             <div class="  my-4">
                 <small>RGB Refill Details</small>
                 <hr>
-                <div class="d-flex justify-content-between flex-wrap">
+                <div class="d-flex justify-content-even">
                     <div class="col-lg-6 col-md-12">
                         <small>Filled</small>
                         <h5>0</h5>
@@ -188,7 +188,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table " id="homeTable" width="100%" cellspacing="0">
+                <table class="table clientTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Name</th>

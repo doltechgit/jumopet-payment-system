@@ -1,5 +1,5 @@
 <x-layout>
-   
+   @role('admin')
         <div class="d-flex justify-content-between align-items-center flex-wrap my-4">
             <div class="card col-lg-6 col-md-12 ">
                 <div class="card-header">
@@ -11,15 +11,15 @@
                         <div class="row">
                             <div class="mx-3">
                                 <small>Cash Transactions</small>
-                                <h5>&#8358;{{number_format($cash)}}</h5>
+                                <h5>&#8358;{{number_format($discount)}}</h5>
                             </div>
                             <div class="mx-3">
                                 <small>POS Transactions</small>
-                                <h5>&#8358;{{number_format($pos)}}</h5>
+                                <h5>&#8358;{{number_format($paid)}}</h5>
                             </div>
                             <div class="mx-3">
                                 <small>Transfer</small>
-                                <h5>&#8358;{{number_format($transfer)}}</h5>
+                                <h5>&#8358;{{number_format($balance)}}</h5>
                             </div>
                         </div>
                     </div>
@@ -93,6 +93,7 @@
                 </div>
             </form>
         </div>
+        @endrole
         <div class="card  my-3">
 
             <div class="card-header py-3 d-flex align-items-center justify-content-between">

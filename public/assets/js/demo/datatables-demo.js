@@ -16,8 +16,9 @@ $(document).ready(function () {
     $('#productTable').DataTable();
 });
 $(document).ready(function () {
-    $("#clientTable").DataTable();
+    $(".clientTable").DataTable();
 });
+
 
 
  

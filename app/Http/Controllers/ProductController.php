@@ -25,7 +25,7 @@ class ProductController extends Controller
             ]);
         }
         return view('products.index', [
-            'products' => auth()->user()->products,
+            'products' => auth()->user()->store->products,
             'categories' => $categories
         ]);
     }

@@ -32,27 +32,33 @@ class TransactionController extends Controller
         $cash = Transaction::where('pay_method', 'cash')->sum('price');
         $pos = Transaction::where('pay_method', 'pos')->sum('price');
         $transfer = Transaction::where('pay_method', 'transfer')->sum('price');
+        $discount = Transaction::all()->sum('discount');
+        $balance =  Transaction::all()->sum('balance');
+        $paid = Transaction::all()->sum('paid');
         $today = date('Y-m-d', time());
         $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-        ->where('pay_method', 'pos')->sum('price');
+            ->where('pay_method', 'pos')->sum('price');
         $cash_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-        ->where('pay_method', 'cash')->sum('price');
+            ->where('pay_method', 'cash')->sum('price');
         $transfer_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-        ->where('pay_method', 'transfer')->sum('price');
+            ->where('pay_method', 'transfer')->sum('price');
         $transactions = Transaction::all();
-        if(auth()->user()->roles->pluck('name')[0] == 'admin'){
-            
+        if (auth()->user()->roles->pluck('name')[0] == 'admin') {
+
             return view('transactions.index', [
                 'transactions' => $transactions,
                 'cash' => $cash,
                 'pos' => $pos,
+                'discount' => $discount,
+                'paid' => $paid,
+                'balance' => $balance,
                 'transfer' => $transfer,
                 'cash_today' => $cash_today,
                 'pos_today' => $pos_today,
                 'transfer_today' => $transfer_today
             ]);
-        }else{
-            
+        } else {
+
             return view('transactions.index', [
                 'transactions' => auth()->user()->store->transactions,
                 'cash' => $cash,
@@ -63,7 +69,6 @@ class TransactionController extends Controller
                 'transfer_today' => $transfer_today
             ]);
         }
-       
     }
 
     /**
@@ -85,15 +90,15 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $cart_check = Cart::all()->count();
-        
-        if($cart_check < 0 || $cart_check == 0){
+
+        if ($cart_check < 0 || $cart_check == 0) {
             return back()->with('error', 'Cart is empty!');
         }
-     
+
         $users = User::all();
         $name = $request->name;
         $phone = $request->phone;
-        
+
         if ($name == '') {
             $name = 'User_' . rand(0, 1000) . time();
         }
@@ -133,19 +138,18 @@ class TransactionController extends Controller
             ]);
             $product = Product::find($cart->product_id);
             $rgb = CurrentStock::find(1);
-            
-            if(strpos($product->category->slug, 'rgb') === 0){
+
+            if (strpos($product->category->slug, 'rgb') === 0) {
                 $updated_quantity = $product->quantity - $cart->quantity;
                 $rgb->quantity = $rgb->quantity + $cart->quantity;
                 $product->quantity = $updated_quantity;
                 $product->save();
                 $rgb->save();
-            }else{
+            } else {
                 $updated_quantity = $product->quantity - $cart->quantity;
                 $product->quantity = $updated_quantity;
                 $product->save();
             }
-            
         }
         \App\Models\Cart::where('user_id', auth()->user()->id)->delete();
         Notification::send($users, new TransactionNotification($transaction->transaction_id));

@@ -18,7 +18,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table " id="clientTable" width="100%" cellspacing="0">
+                <table class="table clientTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
 
