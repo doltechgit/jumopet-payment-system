@@ -142,7 +142,7 @@
                 </tr>
                 <tr>
                     <td>Discount: </td>
-                    <td>&#8358; {{$transaction->discount}} %</td>
+                    <td>&#8358; {{$transaction->discount}}</td>
                 </tr>
                 <tr>
                     <td>Transaction by: </td>
