@@ -108,9 +108,9 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
 
     // Products
     Route::get('/products', [ProductController::class, 'index']);
+    Route::post('/products/store', [ProductController::class, 'store']);
     Route::get('/products/create', [ProductController::class, 'create']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
-    Route::post('/products/store', [ProductController::class, 'store']);
     Route::post('/products/update/{id}', [ProductController::class, 'update']);
     Route::get('/products/delete/{id}', [ProductController::class, 'destroy']);
 

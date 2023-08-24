@@ -93,24 +93,7 @@
                 <small class="fs-3">{{auth()->user()->store->address}}</small>
                 <h5>Transaction Receipt</h5>
             </div>
-            <h6>Order Summary</h6>
-            <table class="table">
-                <tr>
-                    <th>Product</th>
-                    <th>Price per unit</th>
-                    <th>Quantity</th>
-                </tr>
 
-                @foreach ($orders as $order )
-                <tr>
-                    <td>{{$order->product->name}}</td>
-                    <td>{{$order->product->price}}</td>
-                    <td>{{$order->quantity}}</td>
-                </tr>
-                @endforeach
-
-
-            </table>
             <table class="table">
                 <tr>
                     <td>ID: </td>
@@ -148,11 +131,28 @@
                     <td>Transaction by: </td>
                     <td>{{$transaction->user->name}}</td>
                 </tr>
-                <p></p>
-
             </table>
-            <div class="text-center">
-                <h2 class="font-weight-bold"> &#8358; {{number_format($transaction->price)}}</h2>
+            <h6>Order Summary</h6>
+            <table class="table">
+                <thead>
+                    <th><small>Item</small></th>
+                    <th><small>Unit</small></th>
+                    <th><small>Qty</small></th>
+                    <th><small>Amount</small></th>
+                </thead>
+
+                @foreach ($orders as $order )
+                <tr>
+                    <td><small>{{$order->product->name}}</small></td>
+                    <td><small>{{$order->product->price}}</small></td>
+                    <td><small>{{$order->quantity}}</small></td>
+                    <td><small>{{$order->price}}</small></td>
+                </tr>
+                @endforeach
+            </table>
+            <div class="text-center" style="text-align: center">
+                <small>Total:</small>
+                <h2 class="font-weight-bold" style="text-align: center"> &#8358; {{number_format($transaction->price)}}</h2>
             </div>
         </div>
     </div>

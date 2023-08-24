@@ -28,7 +28,7 @@
                                 </select>
                             </div> -->
                 <div class="form-group">
-                    <input class="form-control " type="number" name="quantity" id="stk_quantity" placeholder="Current Quantity" value="{{old('quantity')}}" />
+                    <input class="form-control " type="number" name="quantity" id="stk_quantity" placeholder="Current Quantity" value="{{old('quantity')}}" disabled />
                     @error('quantity')
                     <small class="text-danger">{{$message}}</small>
                     @enderror

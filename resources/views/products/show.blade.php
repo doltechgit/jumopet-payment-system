@@ -32,16 +32,6 @@
                     <div class="form-group">
                         <tr>
                             <td>
-                                <label for="name">Current Quantity:</label>
-                            </td>
-                            <td>
-                                <input class="form-control" name="quantity" placeholder="00" value="{{$product->quantity}}" />
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="form-group">
-                        <tr>
-                            <td>
                                 <label for="name">Product Category:</label>
                             </td>
                             <td>

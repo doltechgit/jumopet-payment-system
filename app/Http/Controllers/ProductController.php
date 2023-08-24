@@ -51,20 +51,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $formData = $request->validate([
-            'name' => 'nullable',
-            'quantity' => 'required | numeric',
-            'price' => 'required | numeric',
-            'date' => 'nullable',
-        ]);
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'category_id' => $request->category,
-            'quantity' => $request->quantity,
+            'quantity' => 0,
             'price' => $request->price,
             'user_id' => auth()->user()->id,
             'store_id' => auth()->user()->store->id
         ]);
+
+        $product->save();
 
         return back()->with('message', 'Product added successfully');
     }
