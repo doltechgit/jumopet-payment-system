@@ -52,7 +52,7 @@ class StockController extends Controller
         ]);
         $stock = Stock::create([
             'product_id' => $product->id,
-            'prev_quantity' => $request->quantity,
+            'prev_quantity' => $product->quantity,
             'add_quantity' => $request->add_quantity,
             'new_quantity' => $request->new_quantity,
             'user_id' => auth()->user()->id,
