@@ -135,18 +135,18 @@
             <h6>Order Summary</h6>
             <table class="table">
                 <thead>
-                    <th><small>Item</small></th>
-                    <th><small>Unit</small></th>
-                    <th><small>Qty</small></th>
-                    <th><small>Amount</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Item</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Unit</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Qty</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Amount</small></th>
                 </thead>
 
                 @foreach ($orders as $order )
                 <tr>
-                    <td><small>{{$order->product->name}}</small></td>
-                    <td><small>{{$order->product->price}}</small></td>
-                    <td><small>{{$order->quantity}}</small></td>
-                    <td><small>{{$order->price}}</small></td>
+                    <td style="width: 50%; text-align:left;"><small>{{$order->product->name}}</small></td>
+                    <td style="width: 50%; text-align:left;"><small>{{$order->product->price}}</small></td>
+                    <td style="width: 50%; text-align:left;"><small>{{$order->quantity}}</small></td>
+                    <td style="width: 50%; text-align:left;"><small>{{$order->price}}</small></td>
                 </tr>
                 @endforeach
             </table>
