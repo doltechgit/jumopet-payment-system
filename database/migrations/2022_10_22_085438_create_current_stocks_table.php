@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('current_stocks', function (Blueprint $table) {
             $table->id();
             $table->float('quantity');
+            $table->foreignId('store_id');
             $table->timestamps();
         });
     }

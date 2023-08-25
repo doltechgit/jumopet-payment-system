@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('store_id')->nullable();
             $table->foreignId('category_id')->nullable();
             $table->foreignId('user_id')->nullable();
+            $table->float('size');
             $table->float('quantity');
             $table->float('price');
             $table->timestamps();

@@ -6,6 +6,7 @@ use App\Exports\ClientExport;
 use App\Models\Client;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\Product;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -71,11 +72,13 @@ class ClientController extends Controller
     {
         $client = Client::find($id);
         $categories = Category::all();
+        $products = Product::all();
         $balance = $client->transactions->sum('balance');
         return view('clients.show', [
             'client' => $client,
             'categories' => $categories,
-            'balance' => $balance
+            'balance' => $balance,
+            'products' => $products
         ]);
     }
 

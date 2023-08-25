@@ -29,20 +29,23 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $cash = Transaction::where('pay_method', 'cash')->sum('price');
-        $pos = Transaction::where('pay_method', 'pos')->sum('price');
-        $transfer = Transaction::where('pay_method', 'transfer')->sum('price');
-        $discount = Transaction::all()->sum('discount');
-        $balance =  Transaction::all()->sum('balance');
-        $paid = Transaction::all()->sum('paid');
-        $total = Transaction::all()->sum('price');
         $today = date('Y-m-d', time());
+        $cash = Transaction::where('pay_method', 'cash')->sum('paid');
+        $pos = Transaction::where('pay_method', 'pos')->sum('paid');
+        $transfer = Transaction::where('pay_method', 'transfer')->sum('paid');
+        $discount = Transaction::all()->sum('discount');
+        $discount_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('discount');
+        $balance =  Transaction::all()->sum('balance');
+        $balance_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('balance');
+        $paid = Transaction::all()->sum('paid');
+        $paid_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('paid');
+        $total = Transaction::all()->sum('price');
         $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'pos')->sum('price');
+            ->where('pay_method', 'pos')->sum('paid');
         $cash_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'cash')->sum('price');
+            ->where('pay_method', 'cash')->sum('paid');
         $transfer_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'transfer')->sum('price');
+            ->where('pay_method', 'transfer')->sum('paid');
         $transactions = Transaction::all();
         if (auth()->user()->roles->pluck('name')[0] == 'admin') {
 
@@ -51,8 +54,11 @@ class TransactionController extends Controller
                 'cash' => $cash,
                 'pos' => $pos,
                 'discount' => $discount,
+                'discount_today' => $discount_today,
                 'paid' => $paid,
+                'paid_today' => $paid_today,
                 'balance' => $balance,
+                'balance_today' => $balance_today,
                 'total' => $total,
                 'transfer' => $transfer,
                 'cash_today' => $cash_today,
@@ -95,6 +101,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        
         $cart_check = Cart::all()->count();
 
         if ($cart_check < 0 || $cart_check == 0) {
@@ -111,38 +118,59 @@ class TransactionController extends Controller
         if ($phone == '') {
             $phone = rand(0, 1000) . time();
         }
-        $client = Client::firstOrCreate([
-            'name' => $name,
-            'phone' => $phone,
-            'email' => $request->email,
-            'address' => $request->address,
-            'dob' => $request->dob,
-            'store_id' =>  auth()->user()->store->id
-        ]);
-        $client->save();
-        $client_id = $client->id;
+        if($request->exists('client_id') === false){
+            $client = Client::firstOrCreate([
+                'name' => $name,
+                'phone' => $phone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'dob' => $request->dob,
+                'store_id' =>  auth()->user()->store->id
+            ]);
+            $client->save();
+            $client_id = $client->id;
 
-        $transaction = Transaction::create([
-            'transaction_id' => $request->transaction_id,
-            'user_id' => auth()->user()->id,
-            'client_id' => $client_id,
-            'price' => $request->buy_price,
-            'pay_method' => $request->method,
-            'discount' => $request->discount,
-            'paid' => $request->paid,
-            'balance' => $request->balance,
-            'store_id' => auth()->user()->store->id
-        ]);
-        $transaction->save();
+            $transaction = Transaction::create([
+                'transaction_id' => $request->transaction_id,
+                'user_id' => auth()->user()->id,
+                'client_id' => $client_id,
+                'price' => $request->buy_price,
+                'pay_method' => $request->method,
+                'discount' => $request->discount,
+                'paid' => $request->paid,
+                'balance' => $request->balance,
+                'store_id' => auth()->user()->store->id
+            ]);
+            $transaction->save();
+        }else if($request->exists('client_id') === true){
+            $client = Client::find($request->client_id);
+            
+            $transaction = Transaction::create([
+                'transaction_id' => $request->transaction_id,
+                'user_id' => auth()->user()->id,
+                'client_id' => $client->id,
+                'price' => $request->buy_price,
+                'pay_method' => $request->method,
+                'discount' => $request->discount,
+                'paid' => $request->paid,
+                'balance' => $request->balance,
+                'store_id' => auth()->user()->store->id
+            ]);
+            $transaction->save();
+        }
+        
         foreach (Cart::where('user_id', auth()->user()->id)->get() as $cart) {
+            $product = Product::find($cart->product_id);
             Order::create([
                 'transaction_id' => $transaction->transaction_id,
-                'product_id' => $cart->product_id,
+                'name' => $product->name,
+                'product_id' => $product->id,
                 'store_id' => auth()->user()->store->id,
+                'unit_price' => $product->price,
                 'quantity' => $cart->quantity,
                 'price' => $cart->price
             ]);
-            $product = Product::find($cart->product_id);
+            
             $rgb = CurrentStock::find(1);
 
             if (strpos($product->category->slug, 'rgb') === 0) {

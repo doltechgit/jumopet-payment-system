@@ -12,11 +12,12 @@ class Product extends Model
     protected $fillable = [
         'name',
         'quantity',
+        'size',
         'price',
         'date',
         'user_id',
         'store_id',
-        'category_id'
+        'category_id',
     ];
 
     public function store()

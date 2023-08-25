@@ -47,6 +47,14 @@
               <i class="fas fa-fw fa-table"></i>
               <span>Stocks Inventory</span></a>
       </li>
+      @endrole
+      
+      
+      
+      
+      
+      <!-- Nav Item - Utilities Collapse Menu -->
+      @role('admin')
       <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productUtilities" aria-expanded="true" aria-controls="collapseUtilities">
               <i class="fas  fa-store"></i>
@@ -61,13 +69,6 @@
               </div>
           </div>
       </li>
-      @endrole
-
-
-
-
-      <!-- Nav Item - Utilities Collapse Menu -->
-      @role('admin')
       <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#clientUtilities" aria-expanded="true" aria-controls="collapseUtilities">
               <i class="fas fa-fw fa-users"></i>

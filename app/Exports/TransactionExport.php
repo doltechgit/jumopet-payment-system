@@ -14,6 +14,7 @@ class TransactionExport implements FromView
     */
     public function view(): View
     {
+        $transactions = Transaction::all();
         return view('transactions.export', [
             'transactions' => Transaction::all()
         ]);

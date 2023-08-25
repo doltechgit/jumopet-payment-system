@@ -1,50 +1,122 @@
 <x-layout>
     @role('admin')
-    <div class="d-flex justify-content-between align-items-center flex-wrap my-4">
-        <div class="card col-lg-6 col-md-12 ">
+
+    <div class="card my-4">
+        <div class="card-header">
+            <h6 class="font-weight-bold">Transaction Summary</h6>
+        </div>
+        <div class="card-body d-flex justify-content-even align-items-center flex-wrap">
+            <div class="col-lg-6">
+                <div class="alert alert-warning p-2 my-2">Total</div>
+                <div class="row">
+                    <div class="mx-3">
+                        <small>Discounts</small>
+                        <h5>&#8358;{{number_format($discount)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Paid</small>
+                        <h5>&#8358;{{number_format($paid)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Outstanding</small>
+                        <h5>&#8358;{{number_format($balance)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Total Amount</small>
+                        <h5>&#8358;{{number_format($total)}}</h5>
+                    </div>
+                </div>
+                <div class="alert alert-danger p-2 my-2">Today </div>
+                <div class="row">
+                    <div class="mx-3">
+                        <small>Discounts</small>
+                        <h5>&#8358;{{number_format($discount_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Paid</small>
+                        <h5>&#8358;{{number_format($paid_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Outstanding</small>
+                        <h5>&#8358;{{number_format($balance_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Total Amount</small>
+                        <h5>&#8358;{{number_format($discount_today + $paid_today + $balance_today)}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="alert alert-success p-2 my-2">Total Paid (Payment Method) </div>
+                <div class="row">
+                    <div class="mx-3">
+                        <small>Cash</small>
+                        <h5>&#8358;{{number_format($cash)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>POS</small>
+                        <h5>&#8358;{{number_format($pos)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Transfer</small>
+                        <h5>&#8358;{{number_format($transfer)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Total Amount</small>
+                        <h5>&#8358;{{number_format($cash + $pos + $transfer)}}</h5>
+                    </div>
+                </div>
+                <div class="alert alert-danger p-2 my-2">Today: Amount Paid (Payment Method) </div>
+                <div class="row">
+                    <div class="mx-3">
+                        <small>Cash Transactions</small>
+                        <h5>&#8358;{{number_format($cash_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>POS Transactions</small>
+                        <h5>&#8358;{{number_format($pos_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Transfer</small>
+                        <h5>&#8358;{{number_format($transfer_today)}}</h5>
+                    </div>
+                    <div class="mx-3">
+                        <small>Total Amount</small>
+                        <h5>&#8358;{{number_format($cash_today + $pos_today + $transfer_today)}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="d-flex justify-content-between align-items-stretch flex-wrap my-4">
+        <div class="card col-lg-6 ">
             <div class="card-header">
-                <h6 class="font-weight-bold">Transaction Summary</h6>
+                <h6 class="font-weight-bold">Filter by Payment Method</h6>
             </div>
-            <div class="card-body">
-                <div class="my-2">
-                    <p>Total: </p>
-                    <div class="row">
-                        <div class="mx-3">
-                            <small>Discounts</small>
-                            <h5>&#8358;{{number_format($discount)}}</h5>
-                        </div>
-                        <div class="mx-3">
-                            <small>Paid</small>
-                            <h5>&#8358;{{number_format($paid)}}</h5>
-                        </div>
-                        <div class="mx-3">
-                            <small>Outstanding</small>
-                            <h5>&#8358;{{number_format($balance)}}</h5>
-                        </div>
-                        <div class="mx-3">
-                            <small>Total Amount</small>
-                            <h5>&#8358;{{number_format($total)}}</h5>
-                        </div>
-                    </div>
+            <form method="POST" action="transactions/generate_method" class=" my-4">
+                @csrf
+                <div class="form-group  mx-2">
+                    <select class="form-control" name="method">
+                        <option value="cash">Cash</option>
+                        <option value="pos">POS</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
                 </div>
-                <div class="my-2">
-                    <p>Today: </p>
-                    <div class="row">
-                        <div class="mx-3">
-                            <small>Cash Transactions</small>
-                            <h5>&#8358;{{number_format($cash_today)}}</h5>
-                        </div>
-                        <div class="mx-3">
-                            <small>POS Transactions</small>
-                            <h5>&#8358;{{number_format($pos_today)}}</h5>
-                        </div>
-                        <div class="mx-3">
-                            <small>Transfer</small>
-                            <h5>&#8358;{{number_format($transfer_today)}}</h5>
-                        </div>
-                    </div>
+                <div class="form-group  mx-2">
+                    <!-- <label><small>From:</small></label> -->
+                    <input type="date" name="from" class="form-control" />
                 </div>
-            </div>
+                <div class="form-group  mx-2">
+                    <!-- <label><small>To:</small></label> -->
+                    <input type="date" name="to" class="form-control" />
+                </div>
+                <div class="form-group  mx-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Generate Report</button>
+                </div>
+            </form>
         </div>
         <div class="card col-lg-6 col-md-12 ">
             <div class="card-header">
@@ -69,33 +141,6 @@
 
             </div>
         </div>
-
-    </div>
-    <div class="card p-4">
-        <div class="card-header">
-            <h6 class="font-weight-bold">Filter by Payment Method</h6>
-        </div>
-        <form method="POST" action="transactions/generate_method" class="row my-4">
-            @csrf
-            <div class="form-group col-md-3 mx-2">
-                <select class="form-control" name="method">
-                    <option value="cash">Cash</option>
-                    <option value="pos">POS</option>
-                    <option value="transfer">Transfer</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3 mx-2">
-                <!-- <label><small>From:</small></label> -->
-                <input type="date" name="from" class="form-control" />
-            </div>
-            <div class="form-group col-md-3 mx-2">
-                <!-- <label><small>To:</small></label> -->
-                <input type="date" name="to" class="form-control" />
-            </div>
-            <div class="form-group col-md-3 mx-2">
-                <button type="submit" class="btn btn-primary btn-sm">Generate Report</button>
-            </div>
-        </form>
     </div>
     @endrole
     <div class="card  my-3">

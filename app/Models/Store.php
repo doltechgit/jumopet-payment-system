@@ -44,6 +44,10 @@ class Store extends Model
     {
         return $this->hasMany(Stock::class, 'store_id');
     }
+    public function current_stock()
+    {
+        return $this->hasOne(CurrentStock::class, 'store_id');
+    }
     public function business()
     {
         return $this->belongsTo(Business::class, 'business_id');

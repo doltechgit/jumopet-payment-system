@@ -25,7 +25,17 @@
                                 <label for="name">Price:</label>
                             </td>
                             <td class="">
-                                <input class="form-control" name="price" placeholder="+23412345678" value="{{$product->price}}" />
+                                <input class="form-control" name="price" placeholder="0.00" value="{{$product->price}}" />
+                            </td>
+                        </tr>
+                    </div>
+                    <div class="form-group">
+                        <tr>
+                            <td>
+                                <label for="name">Size:</label>
+                            </td>
+                            <td class="">
+                                <input class="form-control" name="size" placeholder="0CL" value="{{$product->size}}" />
                             </td>
                         </tr>
                     </div>
@@ -35,14 +45,14 @@
                                 <label for="name">Product Category:</label>
                             </td>
                             <td>
-                                   <select class="form-control category" id="category" name="category_id" value="{{old('category')}}" required>
-                                        <option value="{{$product->category->id}}">{{$product->category->name}}</option>
-                                        @foreach ($categories as $category )
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                <select class="form-control category" id="category" name="category_id" value="{{old('category')}}" required>
+                                    <option value="{{$product->category->id}}">{{$product->category->name}}</option>
+                                    @foreach ($categories as $category )
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
 
-                                        @endforeach
+                                    @endforeach
 
-                                    </select>
+                                </select>
                             </td>
                         </tr>
                     </div>

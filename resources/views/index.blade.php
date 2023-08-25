@@ -35,16 +35,13 @@
                                     </span>
                                 </div>
 
-
-
                                 <div class="row">
                                     <span class="col-lg-6 col-md-12 px-2">
                                         <div class="form-group">
                                             <select class="form-control product" name="product" value="{{old('product')}}">
                                                 <option value="">Product</option>
                                                 @foreach ($products as $product )
-                                                <option value="{{$product->id}}">{{$product->name}}</option>
-
+                                                <option value="{{$product->id}}">{{$product->name}} - {{$product->size}} CL</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -140,7 +137,7 @@
 
                 <hr>
                 <div class="cart">
-                    
+
                 </div>
                 <div class="cart_total " style="display: none;">
                     <h6>Total</h6> <span class="cart_amount">0</span>
@@ -152,16 +149,12 @@
                 <hr>
                 <div class="d-flex justify-content-even">
                     <div class="col-lg-6 col-md-12">
-                        <small>Filled</small>
-                        <h5>0</h5>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                        <small>Empty</small>
-                        <h5>{{$rgb->quantity}}</h5>
+                        <small>Empty Bottles</small>
+                        <h4>{{$rgb->quantity}}</h4>
                     </div>
                 </div>
             </div>
-            <div class="  my-4">
+            <!-- <div class="  my-4">
                 <small>Product Prices</small>
                 <hr>
                 <div class="">
@@ -172,7 +165,7 @@
                     </div>
                     @endforeach
                 </div>
-            </div>
+            </div> -->
 
 
 
@@ -182,47 +175,37 @@
 
         </div>
     </div>
+
     <div class="card  mb-4">
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold ">Clients</h6>
+            <h6 class="m-0 font-weight-bold ">All Products</h6>
+            @role('admin')
+            <div>
+                <a href="/products/create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm "><i class="fas fa-plus fa-sm text-white-50"></i> Add New Product</a>
+                <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm disabled"><i class="fas fa-download fa-sm text-white-50"></i> Download Excel File</a> -->
+            </div>
+            @endrole
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table clientTable" id="" width="100%" cellspacing="0">
+            <div class="table-responsive" id="productTableWrap">
+                <table class="table productTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Contact</th>
-                            <th>Client Category</th>
-                            <th>Transaction Count</th>
-                            <th>Coupon</th>
-                            <th></th>
+                            <th>Current Quantity</th>
+                            <th>Size</th>
+                            <th>Category</th>
+                            <th>Price per unit (&#8358;)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (!$clients)
+                        @foreach ($products as $product )
                         <tr>
-                            <td>No Client yet..</td>
-                        </tr>
-                        @endif
-                        @foreach ($clients->keyBy('created_at') as $client)
-
-
-                        <tr>
-                            <td>{{$client->name}}</td>
-                            <td>{{$client->phone}}</td>
-                            <td>{{count($client->transactions)}}</td>
-                            <td>Nil</td>
-                            <!-- <td>
-                                <x-table-list-menu show="transactions" delete="transactions/delete" :id='$client->id' />
-                            </td> -->
-                            <td>
-                                <a href="/clients/{{$client->id}}">
-                                    <button type="button" class="btn btn-light">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                </a>
-                            </td>
+                            <td>{{$product->name}}</td>
+                            <td>{{$product->quantity}} Crates</td>
+                            <td>{{$product->size}} CL</td>
+                            <td>{{$product->category->name}}</td>
+                            <td>&#8358; {{number_format($product->price)}}</td>
                         </tr>
                         @endforeach
                     </tbody>

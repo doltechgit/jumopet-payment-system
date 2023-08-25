@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
+            $table->string('name');
             $table->float('prev_quantity');
             $table->float('add_quantity');
             $table->float('new_quantity');

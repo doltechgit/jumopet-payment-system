@@ -37,8 +37,6 @@ Route::middleware('auth')->group(function(){
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::post('/logout', [UserController::class, 'logout']);
 
-   
-
     // Notification
     Route::get('/notifications', [NotificationController::class, 'index']);
     // Transactions
@@ -99,12 +97,6 @@ Route::group(['middleware' => ['role:admin']], function(){
     Route::get('/stores/{id}', [StoreController::class, 'show']);
     Route::post('/stores/update/{id}', [StoreController::class, 'update']);
 
-});
-Route::group(['middleware' => ['role:manager|admin']], function () {
-    // Transactions
-    Route::get('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
-    Route::post('/transactions/generate/', [TransactionController::class, 'generate']);
-    Route::post('/transactions/generate_method/', [TransactionController::class, 'generate_method']);    
 
     // Products
     Route::get('/products', [ProductController::class, 'index']);
@@ -120,6 +112,15 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::post('/categories/store', [CategoryController::class, 'store']);
     Route::post('/categories/update/{id}', [CategoryController::class, 'update']);
+
+});
+Route::group(['middleware' => ['role:manager|admin']], function () {
+    // Transactions
+    Route::get('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
+    Route::post('/transactions/generate/', [TransactionController::class, 'generate']);
+    Route::post('/transactions/generate_method/', [TransactionController::class, 'generate_method']);    
+
+    
     // Stocks
     Route::get('/stocks', [StockController::class, 'index']);
     Route::get('/stocks/create', [StockController::class, 'create']);

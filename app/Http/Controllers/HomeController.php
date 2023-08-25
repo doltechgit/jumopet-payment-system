@@ -15,12 +15,12 @@ class HomeController extends Controller
     public function index()
     {
         
-        $products = auth()->user()->store->products;
+        $products = Product::all();
         $clients = Client::where('store_id', auth()->user()->store_id)->get();
         $transactions = Transaction::where('store_id', auth()->user()->store_id)->get();
         $latest_transaction = Transaction::latest()->first();
         $categories = Category::all();
-        $rgb = CurrentStock::find(1);
+        $rgb = auth()->user()->store->current_stock;
         $prev_date = date('Y-m-d', time() - 60 * 60 * 24);
         // $yest_price = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('price');
         // $yest_quantity = Transaction::whereBetween('created_at', [$prev_date . ' 00:00:00', $prev_date . ' 23:59:59'])->sum('quantity');

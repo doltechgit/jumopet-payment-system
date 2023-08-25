@@ -13,7 +13,7 @@ $(document).ready(function () {
      $('#stockTable').DataTable();
 });
 $(document).ready(function () {
-    $('#productTable').DataTable();
+    $('.productTable').DataTable();
 });
 $(document).ready(function () {
     $(".clientTable").DataTable();

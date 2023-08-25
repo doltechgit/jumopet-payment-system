@@ -89,71 +89,74 @@
         </div>
         <div class="card col-lg-5 col-md-12 mx-2 p-5 print_area border-0" id="print_area">
             <div class="card-header text-center border-0" style="text-align: center">
-                <h2 class="text-uppercase h3 font-weight-bold my0" style="line-height: 10px;">Jumopet Store</h2>
-                <small class="fs-3">{{auth()->user()->store->address}}</small>
+                <h2 class="text-uppercase h3 font-weight-bold my0" style="line-height: 10px;">Jumopet Enterprise</h2>
+                <small class="fs-3">{{auth()->user()->store->address}}</small><br>
                 <small class="fs-3">{{auth()->user()->store->contact}}</small>
                 <h5>Transaction Receipt</h5>
             </div>
 
             <table class="table">
                 <tr>
-                    <td>ID: </td>
-                    <td>{{$transaction->transaction_id}}</td>
+                    <td><small>ID: </small></td>
+                    <td><small>{{$transaction->transaction_id}}</small></td>
                 </tr>
                 <tr>
-                    <td>Date: </td>
-                    <td>{{$transaction->created_at}}</td>
+                    <td><small>Date: </small></td>
+                    <td><small>{{$transaction->created_at}}</small></td>
                 </tr>
                 <tr>
-                    <td>Name: </td>
-                    <td>{{$transaction->client->name}}</td>
+                    <td><small>Name: </small></td>
+                    <td><small>{{$transaction->client->name}}</small></td>
                 </tr>
                 <tr>
-                    <td>Phone: </td>
-                    <td>{{$transaction->client->phone}} </td>
+                    <td><small>Phone: </small></td>
+                    <td><small>{{$transaction->client->phone}} </small></td>
                 </tr>
                 <tr>
-                    <td>Payment Method: </td>
-                    <td>{{$transaction->pay_method}}</td>
+                    <td><small>Payment Method: </small></td>
+                    <td><small>{{$transaction->pay_method}}</small></td>
                 </tr>
                 <tr>
-                    <td>Paid: </td>
-                    <td>&#8358; {{$transaction->paid}}</td>
+                    <td><small>Paid: </small></td>
+                    <td><small>&#8358; {{$transaction->paid}}</small></td>
                 </tr>
                 <tr>
-                    <td>To Bal: </td>
-                    <td>&#8358; {{$transaction->balance}}</td>
+                    <td><small>To Bal: </small></td>
+                    <td><small>&#8358; {{$transaction->balance}}</small></td>
                 </tr>
                 <tr>
-                    <td>Discount: </td>
-                    <td>&#8358; {{$transaction->discount}}</td>
+                    <td><small>Discount: </small></td>
+                    <td><small>&#8358; {{$transaction->discount}}</small></td>
                 </tr>
                 <tr>
-                    <td>Transaction by: </td>
-                    <td>{{$transaction->user->name}}</td>
+                    <td><small>Transaction by: </small></td>
+                    <td><small>{{$transaction->user->name}}</small></td>
                 </tr>
             </table>
-            <h6>Order Summary</h6>
+            <hr>
             <table class="table">
                 <thead>
                     <th style="width: 50%; text-align:left;"><small>Item</small></th>
-                    <th style="width: 50%; text-align:left;"><small>Unit</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Size</small></th>
                     <th style="width: 50%; text-align:left;"><small>Qty</small></th>
+                    <th style="width: 50%; text-align:left;"><small>Price</small></th>
                     <th style="width: 50%; text-align:left;"><small>Amount</small></th>
                 </thead>
 
                 @foreach ($orders as $order )
                 <tr>
-                    <td style="width: 50%; text-align:left;"><small>{{$order->product->name}}</small></td>
-                    <td style="width: 50%; text-align:left;"><small>{{$order->product->price}}</small></td>
-                    <td style="width: 50%; text-align:left;"><small>{{$order->quantity}}</small></td>
-                    <td style="width: 50%; text-align:left;"><small>{{$order->price}}</small></td>
+                    <td style="width: 30%; text-align:left;"><small>{{$order->name}}</small></td>
+                    <td style="width: 20%; text-align:left;"><small>{{$order->product->size}} CL</small></td>
+                    <td style="width: 20%; text-align:left;"><small>{{$order->quantity}}</small></td>
+                    <td style="width: 10%; text-align:left;"><small>{{$order->unit_price}}</small></td>
+                    <td style="width: 10%; text-align:left;"><small>{{$order->price}}</small></td>
                 </tr>
                 @endforeach
             </table>
+            <hr>
             <div class="text-center" style="text-align: center">
                 <small>Total:</small>
-                <h2 class="font-weight-bold" style="text-align: center"> &#8358; {{number_format($transaction->price)}}</h2>
+                <h2 class="font-weight-bold" style="text-align: center; line-height: 10px;"> &#8358; {{number_format($transaction->price)}}</h2>
             </div>
         </div>
     </div>

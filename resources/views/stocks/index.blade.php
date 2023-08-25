@@ -39,7 +39,7 @@
                         <tr>
 
                             <td>{{$stock->created_at}}</td>
-                            <td><a href=""></a>{{$stock->product->name}}</td>
+                            <td><a href=""></a>{{$stock->name}}</td>
                             <td>{{$stock->prev_quantity}}</td>
                             <td>{{$stock->add_quantity}}</td>
                             <td>{{$stock->new_quantity}}</td>

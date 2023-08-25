@@ -16,10 +16,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_id');
+            $table->string('name');
             $table->foreignId('product_id');
-            $table->foreignId('store_id');
+            $table->float('unit_price');
             $table->float('quantity');
             $table->float('price');
+            $table->foreignId('store_id');
             $table->timestamps();
         });
     }

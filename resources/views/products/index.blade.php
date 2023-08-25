@@ -9,25 +9,25 @@
         </div>
         <div class="card-body">
             <div class="table-responsive" id="productTableWrap">
-                <table class="table " id="productTable" width="100%" cellspacing="0">
+                <table class="table productTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
+                             <th>Name</th>
                             <th>Current Quantity</th>
+                            <th>Size</th>
                             <th>Category</th>
-                            <th>Price per unit (#)</th>
+                            <th>Price per unit (&#8358;)</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($products as $product )
                         <tr>
-                            <td>{{$product->id}}</td>
                             <td><a href="/products/{{$product->id}}">{{$product->name}}</a></td>
-                            <td>{{$product->quantity}}</td>
+                            <td>{{$product->quantity}} Crates</td>
+                            <td>{{$product->size}} CL</td>
                             <td>{{$product->category->name}}</td>
-                            <td>{{$product->price}}</td>
+                            <td>&#8358; {{number_format($product->price)}}</td>
                             <td>
 
                                 <x-table-list-menu show="products" delete="products/delete" :id='$product->id' approve />

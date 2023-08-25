@@ -12,7 +12,10 @@ class CurrentStock extends Model
     protected $table = 'current_stocks';
     protected $fillable = [
         'quantity',
-        
-
     ];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
 }

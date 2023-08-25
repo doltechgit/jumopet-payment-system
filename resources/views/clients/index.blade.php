@@ -21,11 +21,13 @@
                 <table class="table clientTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Transactions</th>
+                            @role('admin')
                             <th></th>
+                            @endrole
                         </tr>
                     </thead>
                     <tbody>
@@ -38,13 +40,15 @@
 
 
                         <tr>
-                            <td>{{$client->id}}</td>
+
                             <td><a href="/clients/{{$client->id}}">{{$client->name}}</a></td>
                             <td>{{$client->phone}}</td>
                             <td>{{count($client->transactions)}}</td>
+                            @role('admin')
                             <td>
                                 <x-table-list-menu show="clients" delete="clients/delete" :id='$client->id' />
                             </td>
+                            @endrole
 
 
                         </tr>
