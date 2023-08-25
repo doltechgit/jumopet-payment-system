@@ -42,7 +42,7 @@
                     </div>
                     <div class="mx-3">
                         <small>Total Amount</small>
-                        <h5>&#8358;{{number_format($discount_today + $paid_today + $balance_today)}}</h5>
+                        <h5>&#8358;{{number_format($paid_today + $balance_today)}}</h5>
                     </div>
                 </div>
             </div>
