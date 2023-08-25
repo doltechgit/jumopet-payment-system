@@ -171,7 +171,7 @@ class TransactionController extends Controller
                 'price' => $cart->price
             ]);
             
-            $rgb = CurrentStock::find(1);
+            $rgb = CurrentStock::find(auth()->user()->store->id);
 
             if (strpos($product->category->slug, 'rgb') === 0) {
                 $updated_quantity = $product->quantity - $cart->quantity;

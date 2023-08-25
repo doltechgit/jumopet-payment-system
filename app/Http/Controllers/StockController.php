@@ -62,7 +62,7 @@ class StockController extends Controller
         $stock->save();
         $product->quantity = $stock->new_quantity;
         $product->save();
-        $rgb = CurrentStock::find(1);
+        $rgb = CurrentStock::find(auth()->user()->store->id);
         if (strpos($product->category->slug, 'rgb') === 0) {
             $rgb->quantity = $rgb->quantity - $stock->add_quantity;
             $rgb->save();
