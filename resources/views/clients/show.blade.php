@@ -275,7 +275,7 @@
                             <td>
                                 <a href="/transactions/{{$transaction->id}}">
                                     <small>{{$transaction->created_at}}</small>
-                                    <h6>{{$transaction->transaction_id}}</h6>
+                                    <h6>{{$transaction->trans_id}}</h6>
                                 </a>
                             </td>
                             <td>
