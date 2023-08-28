@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id');
+            $table->foreignId('transaction_id');
             $table->string('name');
             $table->foreignId('product_id');
             $table->float('unit_price');
+            $table->float('size');
             $table->float('quantity');
-            $table->float('price');
+            $table->float('amount');
             $table->foreignId('store_id');
             $table->timestamps();
         });

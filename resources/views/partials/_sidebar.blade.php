@@ -30,9 +30,22 @@
           Menu
       </div>
       <li class="nav-item {{Request::path() == 'transactions' ? 'active' : ''}}">
-          <a class="nav-link" href="/transactions">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#transactionUtilities" aria-expanded="true" aria-controls="collapseUtilities">
               <i class="fas fa-fw fa-chart-area"></i>
-              <span>Transactions</span></a>
+              <span>Transactions</span>
+          </a>
+          <div id="transactionUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                  <h6 class="collapse-header">Transactions:</h6>
+                  <a class="collapse-item" href="/transactions">All Transactions</a>
+                  <a class="collapse-item" href="/orders">Orders Report</a>
+              </div>
+          </div>
+      </li>
+      <li class="nav-item {{Request::path() == 'stocks' ? 'active' : ''}}">
+          <a class="nav-link" href="stocks">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Stocks Inventory</span></a>
       </li>
       @role('cashier|manager')
       <li class="nav-item {{Request::path() == 'clients' ? 'active' : ''}}">
@@ -41,18 +54,6 @@
               <span>Clients</span></a>
       </li>
       @endrole
-      @role('manager|admin')
-      <li class="nav-item {{Request::path() == 'stocks' ? 'active' : ''}}">
-          <a class="nav-link" href="stocks">
-              <i class="fas fa-fw fa-table"></i>
-              <span>Stocks Inventory</span></a>
-      </li>
-      @endrole
-      
-      
-      
-      
-      
       <!-- Nav Item - Utilities Collapse Menu -->
       @role('admin')
       <li class="nav-item">

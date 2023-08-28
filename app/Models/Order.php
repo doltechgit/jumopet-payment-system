@@ -13,9 +13,10 @@ class Order extends Model
         'transaction_id',
         'name',
         'product_id',
+        'size',
         'unit_price',
         'quantity',
-        'price',
+        'amount',
         'store_id'
     ];
 

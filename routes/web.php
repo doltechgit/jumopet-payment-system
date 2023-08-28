@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function(){
 
     // Notification
     Route::get('/notifications', [NotificationController::class, 'index']);
+
     // Transactions
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{id}', [TransactionController::class, 'show']);
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/print_pdf/{id}', [TransactionController::class, 'receipt_pdf']);
     Route::get('/download_pdf/{id}', [TransactionController::class, 'download_pdf']);
     Route::get('/export', [TransactionController::class, 'export']);
+    Route::get('/orders', [TransactionController::class, 'orders']);
+
 
     //Carts
     Route::get('/carts', [CartController::class, 'index']);
@@ -70,8 +73,10 @@ Route::middleware('auth')->group(function(){
 
     //Product
     Route::get('/get_product/{id}', [ProductController::class, 'get_product']);
+    Route::get('/products/{id}', [ProductController::class, 'show']);
 
-    
+    // Stocks
+    Route::get('/stocks', [StockController::class, 'index']);
 });
 
 Route::group(['middleware' => ['role:admin']], function(){
@@ -102,7 +107,7 @@ Route::group(['middleware' => ['role:admin']], function(){
     Route::get('/products', [ProductController::class, 'index']);
     Route::post('/products/store', [ProductController::class, 'store']);
     Route::get('/products/create', [ProductController::class, 'create']);
-    Route::get('/products/{id}', [ProductController::class, 'show']);
+    
     Route::post('/products/update/{id}', [ProductController::class, 'update']);
     Route::get('/products/delete/{id}', [ProductController::class, 'destroy']);
 
@@ -122,7 +127,6 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
 
     
     // Stocks
-    Route::get('/stocks', [StockController::class, 'index']);
     Route::get('/stocks/create', [StockController::class, 'create']);
     Route::post('/stocks/store', [StockController::class, 'store']);
     Route::get('/stocks_export', [StockController::class, 'export']);

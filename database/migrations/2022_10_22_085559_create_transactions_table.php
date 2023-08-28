@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id');
+            $table->string('trans_id');
             $table->foreignId('store_id');
             $table->foreignId('client_id');
+            $table->string('client_name');
             $table->foreignId('user_id');
             $table->float('price');
             $table->float('discount');

@@ -30,10 +30,17 @@
             <td>{{ $transaction->balance }}</td>
             <td>{{ $transaction->pay_method }}</td>
             <td>
-               {{$transaction->orders}}
+                @foreach ($transaction->orders as $order )
+                <span style="display: flex;">
+                    {{$order->name}} |
+                    {{$order->unit_price}} |
+                    {{$order->quantity}} |
+                    {{$order->amount}} |
+                </span><br>
+                @endforeach
             </td>
             @if($transaction->client == null)
-            <td>Client does not exist</td>
+            <td>$transaction->client_name</td>
             <td>Client does not exist</td>
             @else
             <td>{{ $transaction->client->name }}</td>

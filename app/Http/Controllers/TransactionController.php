@@ -29,26 +29,26 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $today = date('Y-m-d', time());
-        $cash = Transaction::where('pay_method', 'cash')->sum('paid');
-        $pos = Transaction::where('pay_method', 'pos')->sum('paid');
-        $transfer = Transaction::where('pay_method', 'transfer')->sum('paid');
-        $discount = Transaction::all()->sum('discount');
-        $discount_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('discount');
-        $balance =  Transaction::all()->sum('balance');
-        $balance_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('balance');
-        $paid = Transaction::all()->sum('paid');
-        $paid_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('paid');
-        $total = Transaction::all()->sum('price');
-        $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'pos')->sum('paid');
-        $cash_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'cash')->sum('paid');
-        $transfer_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
-            ->where('pay_method', 'transfer')->sum('paid');
-        $transactions = Transaction::all();
+        
         if (auth()->user()->roles->pluck('name')[0] == 'admin') {
-
+            $today = date('Y-m-d', time());
+            $cash = Transaction::where('pay_method', 'cash')->sum('paid');
+            $pos = Transaction::where('pay_method', 'pos')->sum('paid');
+            $transfer = Transaction::where('pay_method', 'transfer')->sum('paid');
+            $discount = Transaction::all()->sum('discount');
+            $discount_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('discount');
+            $balance =  Transaction::all()->sum('balance');
+            $balance_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('balance');
+            $paid = Transaction::all()->sum('paid');
+            $paid_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('paid');
+            $total = Transaction::all()->sum('price');
+            $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'pos')->sum('paid');
+            $cash_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'cash')->sum('paid');
+            $transfer_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'transfer')->sum('paid');
+            $transactions = Transaction::all();
             return view('transactions.index', [
                 'transactions' => $transactions,
                 'cash' => $cash,
@@ -66,19 +66,57 @@ class TransactionController extends Controller
                 'transfer_today' => $transfer_today
             ]);
         } else {
-
+            $today = date('Y-m-d', time());
+            $cash = Transaction::where('store_id', auth()->user()->store->id)->where('pay_method', 'cash')->sum('paid');
+            $pos = Transaction::where('store_id', auth()->user()->store->id)->where('pay_method', 'pos')->sum('paid');
+            $transfer = Transaction::where('store_id', auth()->user()->store->id)->where('pay_method', 'transfer')->sum('paid');
+            $discount = Transaction::where('store_id', auth()->user()->store->id)->sum('discount');
+            $discount_today = Transaction::where('store_id', auth()->user()->store->id)->whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('discount');
+            $balance =  Transaction::where('store_id', auth()->user()->store->id)->sum('balance');
+            $balance_today = Transaction::where('store_id', auth()->user()->store->id)->whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('balance');
+            $paid = Transaction::where('store_id', auth()->user()->store->id)->sum('paid');
+            $paid_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('paid');
+            $total = Transaction::where('store_id', auth()->user()->store->id)->sum('price');
+            $pos_today = Transaction::where('store_id', auth()->user()->store->id)->whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'pos')->sum('paid');
+            $cash_today = Transaction::where('store_id', auth()->user()->store->id)->whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'cash')->sum('paid');
+            $transfer_today = Transaction::where('store_id', auth()->user()->store->id)->whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+                ->where('pay_method', 'transfer')->sum('paid');
+            $transactions = Transaction::all();
             return view('transactions.index', [
                 'transactions' => auth()->user()->store->transactions,
                 'cash' => $cash,
                 'pos' => $pos,
                 'discount' => $discount,
+                'discount_today' => $discount_today,
                 'paid' => $paid,
+                'paid_today' => $paid_today,
                 'balance' => $balance,
+                'balance_today' => $balance_today,
                 'total' => $total,
                 'transfer' => $transfer,
                 'cash_today' => $cash_today,
                 'pos_today' => $pos_today,
                 'transfer_today' => $transfer_today
+            ]);
+        }
+    }
+
+    public function orders () {
+        if (auth()->user()->roles->pluck('name')[0] == 'admin') {
+            $orders = Order::all();
+            $transactions = Transaction::all();
+        return view('transactions.order', [
+            'orders' => $orders,
+            'transactions' => $transactions
+        ]);
+        } else {
+            $store_orders = Order::where('id', auth()->user()->store->id)->get();
+            $store_transactions = Transaction::where('id', auth()->user()->store->id)->get();
+            return view('transactions.order', [
+                'orders' => $store_orders,
+                'transactions' => $store_transactions
             ]);
         }
     }
@@ -131,9 +169,10 @@ class TransactionController extends Controller
             $client_id = $client->id;
 
             $transaction = Transaction::create([
-                'transaction_id' => $request->transaction_id,
+                'trans_id' => $request->transaction_id,
                 'user_id' => auth()->user()->id,
                 'client_id' => $client_id,
+                'client_name' => $client->name,
                 'price' => $request->buy_price,
                 'pay_method' => $request->method,
                 'discount' => $request->discount,
@@ -146,9 +185,10 @@ class TransactionController extends Controller
             $client = Client::find($request->client_id);
             
             $transaction = Transaction::create([
-                'transaction_id' => $request->transaction_id,
+                'trans_id' => $request->transaction_id,
                 'user_id' => auth()->user()->id,
                 'client_id' => $client->id,
+                'client_name' => $client->name,
                 'price' => $request->buy_price,
                 'pay_method' => $request->method,
                 'discount' => $request->discount,
@@ -162,13 +202,14 @@ class TransactionController extends Controller
         foreach (Cart::where('user_id', auth()->user()->id)->get() as $cart) {
             $product = Product::find($cart->product_id);
             Order::create([
-                'transaction_id' => $transaction->transaction_id,
+                'transaction_id' => $transaction->id,
                 'name' => $product->name,
                 'product_id' => $product->id,
+                'size' => $product->size,
                 'store_id' => auth()->user()->store->id,
                 'unit_price' => $product->price,
                 'quantity' => $cart->quantity,
-                'price' => $cart->price
+                'amount' => $cart->price
             ]);
             
             $rgb = CurrentStock::find(auth()->user()->store->id);
@@ -248,7 +289,7 @@ class TransactionController extends Controller
     public function show($id)
     {
         $transaction = Transaction::find($id);
-        $orders = Order::where('transaction_id', $transaction->transaction_id)->get();
+        $orders = $transaction->orders;
         return view('transactions.show', [
             'transaction' => $transaction,
             'orders' => $orders
@@ -311,16 +352,14 @@ class TransactionController extends Controller
 
     public function generate(Request $request)
     {
-
-        return (new TransactionSortReport($request->from, $request->to))->download('mt-report.csv');
-        // dd($transaction);
+        $transaction = Transaction::whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
+        return (new TransactionSortReport($transaction))->download('jt-report.csv');
     }
 
     public function generate_method(Request $request)
     {
-
-        return (new MethodReport($request->from, $request->to, $request->method))->download('mt-' . $request->method . '.csv');
-        // dd($transaction);
+        $transaction = Transaction::whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->where('pay_method', $request->method)->get();
+        return (new MethodReport($transaction))->download('jt-' . $request->method . '.csv');
     }
 
     /**

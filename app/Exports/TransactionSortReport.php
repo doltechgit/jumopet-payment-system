@@ -9,22 +9,22 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class TransactionSortReport implements FromQuery
+class TransactionSortReport implements FromView
 {
     use Exportable;
 
-    public $from;
-    public $to;
+    public $transaction;
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($from, $to)
+    public function __construct($transaction)
     {
-        $this->from = $from;
-        $this->to = $to;
+        $this->transaction = $transaction;
     }
-    public function query()
+    public function view(): View
     {
-        return Transaction::query()->whereBetween('created_at', [$this->from . ' 00:00:00', $this->to . ' 23:59:59']);
+        return view('transactions.export', [
+            'transactions' => $this->transaction
+        ]);
     }
 }

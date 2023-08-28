@@ -33,8 +33,8 @@
 
                 @foreach ($orders as $order )
                 <tr>
-                    <td>{{$order->product->name}}</td>
-                    <td>{{$order->product->price}}</td>
+                    <td>{{$order->name}}</td>
+                    <td>{{$order->unit_price}}</td>
                     <td>{{$order->quantity}}</td>
                 </tr>
                 @endforeach
@@ -43,7 +43,7 @@
             </table>
             <table class="table p-0 m-0">
                 <tr class="col-md-6 p-0">
-                    <td>ID: {{$transaction->transaction_id}}</td>
+                    <td>ID: {{$transaction->trans_id}}</td>
                     <td>Date: {{$transaction->created_at}}</td>
                 </tr>
                 <tr class="c">
@@ -89,7 +89,7 @@
         </div>
         <div class="card col-lg-5 col-md-12 mx-2 p-5 print_area border-0" id="print_area">
             <div class="card-header text-center border-0" style="text-align: center">
-                <h2 class="text-uppercase h3 font-weight-bold my0" style="line-height: 10px;">Jumopet Enterprise</h2>
+                <h2 class="text-uppercase h4 font-weight-bold my-0" style="line-height: 20px;">Jumopet Enterprises</h2>
                 <small class="fs-3">{{auth()->user()->store->address}}</small><br>
                 <small class="fs-3">{{auth()->user()->store->contact}}</small>
                 <h5>Transaction Receipt</h5>
@@ -104,14 +104,16 @@
                     <td><small>Date: </small></td>
                     <td><small>{{$transaction->created_at}}</small></td>
                 </tr>
+
                 <tr>
                     <td><small>Name: </small></td>
+                    @if($transaction->client !== null)
                     <td><small>{{$transaction->client->name}}</small></td>
+                    @else
+                    <td><small>{{$transaction->client_name}}</small></td>
+                    @endif
                 </tr>
-                <tr>
-                    <td><small>Phone: </small></td>
-                    <td><small>{{$transaction->client->phone}} </small></td>
-                </tr>
+
                 <tr>
                     <td><small>Payment Method: </small></td>
                     <td><small>{{$transaction->pay_method}}</small></td>
@@ -146,10 +148,10 @@
                 @foreach ($orders as $order )
                 <tr>
                     <td style="width: 30%; text-align:left;"><small>{{$order->name}}</small></td>
-                    <td style="width: 20%; text-align:left;"><small>{{$order->product->size}} CL</small></td>
+                    <td style="width: 20%; text-align:left;"><small>{{$order->size}} CL</small></td>
                     <td style="width: 20%; text-align:left;"><small>{{$order->quantity}}</small></td>
                     <td style="width: 10%; text-align:left;"><small>{{$order->unit_price}}</small></td>
-                    <td style="width: 10%; text-align:left;"><small>{{$order->price}}</small></td>
+                    <td style="width: 10%; text-align:left;"><small>{{$order->amount}}</small></td>
                 </tr>
                 @endforeach
             </table>

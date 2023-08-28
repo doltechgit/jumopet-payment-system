@@ -193,16 +193,22 @@
                         <tr>
                             <th>Name</th>
                             <th>Current Quantity</th>
+                            <th>Sold</th>
                             <th>Size</th>
                             <th>Category</th>
                             <th>Price per unit (&#8358;)</th>
                         </tr>
                     </thead>
                     <tbody>
+
                         @foreach ($products as $product )
                         <tr>
-                            <td>{{$product->name}}</td>
+                            <td><a href="products/{{$product->id}}">{{$product->name}}</a></td>
                             <td>{{$product->quantity}} Crates</td>
+                            @php $total_qty = 0
+
+                            @endphp
+                            <td> {{$product->orders->sum('quantity')}} Crates</td>
                             <td>{{$product->size}} CL</td>
                             <td>{{$product->category->name}}</td>
                             <td>&#8358; {{number_format($product->price)}}</td>
