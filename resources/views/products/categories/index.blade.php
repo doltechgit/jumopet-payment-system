@@ -61,14 +61,13 @@
                         @foreach ($categories as $category )
                         <tr>
 
-                            <td><a href="/categories/{{$category->id}}">{{$category->name}}</a></td>
+                            <td>{{$category->name}}</td>
                             <td>&#8358; {{number_format($category->price)}}</td>
                             <td>{{$category->slug}}</td>
-                            <td>{{$category->refill}}</td>
-                            <td>
+                            <!-- <td>
 
                                 <x-table-list-menu show="categories" delete="categories/delete" :id='$category->id' approve />
-                            </td>
+                            </td> -->
                         </tr>
                         @endforeach
                     </tbody>
