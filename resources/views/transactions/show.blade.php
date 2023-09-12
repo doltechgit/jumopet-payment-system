@@ -51,7 +51,15 @@
                     <td>Phone: {{$transaction->client->phone}} </td>
                 </tr>
                 <tr class="">
-                    <td>Payment Method: {{$transaction->pay_method}}</td>
+                    <td>Payment Method:
+                        @if ($transaction->pay_method == 'Paid')
+                        @foreach ($transaction->methods as $method)
+                        {{$method->method}} - &#8358; {{$method->amount}}
+                        @endforeach
+                        @else
+                        {{$transaction->pay_method}}
+                        @endif
+                    </td>
                     <td>Discount: &#8358; {{$transaction->discount}} </td>
                 </tr>
 
@@ -116,7 +124,17 @@
 
                 <tr>
                     <td><small>Payment Method: </small></td>
-                    <td><small>{{$transaction->pay_method}}</small></td>
+                    <td>
+                        <small>
+                            @if ($transaction->pay_method == 'Paid')
+                            @foreach ($transaction->methods as $method)
+                            {{$method->method}} - &#8358; {{$method->amount}}
+                            @endforeach
+                            @else
+                            {{$transaction->pay_method}}
+                            @endif
+                        </small>
+                    </td>
                 </tr>
                 <tr>
                     <td><small>Paid: </small></td>

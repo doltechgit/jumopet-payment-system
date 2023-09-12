@@ -115,7 +115,7 @@
     </div>
 
     @role('admin')
-    <div class="d-flex justify-content-between align-items-stretch">
+    <div class="d-flex justify-content-between align-items-stretch flex-wrap">
         <div class="card w-100 mx-2">
             <div class="card-header">
                 <h6 class="font-weight-bold">Filter by Payment Method</h6>
@@ -188,7 +188,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table" id="transTable" width="100%" cellspacing="0">
+                <table class="table transTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Transaction ID</th>
@@ -219,7 +219,15 @@
                             <td>
                                 <h5>&#8358; {{number_format($transaction->price)}}</h5>
                                 <small>Discount: &#8358; {{$transaction->discount}}</small>
-                                <small>Payment Method: {{$transaction->pay_method}}</small>
+                                <small>Payment Method:
+                                    @if ($transaction->pay_method == 'Paid')
+                                    @foreach ($transaction->methods as $method)
+                                    {{$method->method}} - &#8358; {{$method->amount}}
+                                    @endforeach
+                                    @else
+                                    {{$transaction->pay_method}}
+                                    @endif
+                                </small>
                             </td>
                             @if($transaction->client !== null)
                             <td>

@@ -1,4 +1,26 @@
 <x-layout>
+    <div class="d-flex justify-content-center align-items-center flex-wrap">
+        <div class="card col-md-3 border-left-primary p-2">
+            <small>Today</small>
+            <h4>{{$today_qty}} Crates</h4>
+            <small>Total Amount: &#8358; {{number_format($today_amt)}}</small>
+        </div>
+        <div class="card col-md-3 border-left-danger p-2">
+            <small>This Week</small>
+            <h4>{{$this_week_qty}} Crates</h4>
+            <small>Total Amount: &#8358; {{number_format($this_week_amt)}}</small>
+        </div>
+        <div class="card col-md-3 border-left-warning p-2">
+            <small>Last Week</small>
+            <h4>{{$last_week_qty}} Crates</h4>
+            <small>Total Amount: &#8358; {{number_format($last_week_amt)}}</small>
+        </div>
+        <div class="card col-md-3 border-left-primary p-2">
+            <small>Last Month</small>
+            <h4>{{$last_month_qty}} Crates</h4>
+            <small>Total Amount: &#8358; {{number_format($last_month_amt)}}</small>
+        </div>
+    </div>
     <div class="card  my-3">
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold ">Order History for {{$product->name}}</h6>
@@ -18,7 +40,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table" id="transTable" width="100%" cellspacing="0">
+                <table class="table transTable" id="" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Date</th>

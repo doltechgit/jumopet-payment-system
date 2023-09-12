@@ -2,7 +2,7 @@
     <div class="card  mb-4">
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold">All Stocks</h6>
-            @role('manager|admin')
+            @role('admin')
             <div>
                 <a href="/stocks/create" class=" btn btn-sm btn-primary shadow-sm "><i class="fas fa-plus fa-sm text-white-50"></i> Restock</a>
                 <div class="dropdown d-none d-sm-inline-block">

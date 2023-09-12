@@ -14,6 +14,7 @@ use App\Exports\TransactionSortReport;
 use App\Exports\MethodReport;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Method;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Notifications\TransactionNotification;
@@ -33,8 +34,14 @@ class TransactionController extends Controller
         if (auth()->user()->roles->pluck('name')[0] == 'admin') {
             $today = date('Y-m-d', time());
             $cash = Transaction::where('pay_method', 'cash')->sum('paid');
+            $cash_method = Method::where('method', 'cash')->sum('amount');
+            $cash_total = $cash_method + $cash;
             $pos = Transaction::where('pay_method', 'pos')->sum('paid');
+            $pos_method = Method::where('method', 'pos')->sum('amount');
+            $pos_total = $pos_method + $pos;
             $transfer = Transaction::where('pay_method', 'transfer')->sum('paid');
+            $transfer_method = Method::where('method', 'transfer')->sum('amount');
+            $transfer_total = $transfer_method + $transfer;
             $discount = Transaction::all()->sum('discount');
             $discount_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->sum('discount');
             $balance =  Transaction::all()->sum('balance');
@@ -44,15 +51,24 @@ class TransactionController extends Controller
             $total = Transaction::all()->sum('price');
             $pos_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
                 ->where('pay_method', 'pos')->sum('paid');
+            $pos_method_today = Method::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+            ->where('method', 'pos')->sum('amount');
+            $pos_total_today = $pos_today + $pos_method_today;
             $cash_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
                 ->where('pay_method', 'cash')->sum('paid');
+            $cash_method_today = Method::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+            ->where('method', 'cash')->sum('amount');
+            $cash_total_today = $cash_today + $cash_method_today;
             $transfer_today = Transaction::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
                 ->where('pay_method', 'transfer')->sum('paid');
+            $transfer_method_today = Method::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])
+            ->where('method', 'transfer')->sum('amount');
+            $transfer_total_today = $transfer_today + $transfer_method_today;
             $transactions = Transaction::all();
             return view('transactions.index', [
                 'transactions' => $transactions,
-                'cash' => $cash,
-                'pos' => $pos,
+                'cash' => $cash_total,
+                'pos' => $pos_total,
                 'discount' => $discount,
                 'discount_today' => $discount_today,
                 'paid' => $paid,
@@ -60,10 +76,10 @@ class TransactionController extends Controller
                 'balance' => $balance,
                 'balance_today' => $balance_today,
                 'total' => $total,
-                'transfer' => $transfer,
-                'cash_today' => $cash_today,
-                'pos_today' => $pos_today,
-                'transfer_today' => $transfer_today
+                'transfer' => $transfer_total,
+                'cash_today' => $cash_total_today,
+                'pos_today' => $pos_total_today,
+                'transfer_today' => $transfer_total_today
             ]);
         } else {
             $today = date('Y-m-d', time());
@@ -139,6 +155,12 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+
+       $method_amount = $request->input('method_amount', []);
+        // dd($method_amount[1]);
+           
+
+       
         
         $cart_check = Cart::all()->count();
 
@@ -174,13 +196,21 @@ class TransactionController extends Controller
                 'client_id' => $client_id,
                 'client_name' => $client->name,
                 'price' => $request->buy_price,
-                'pay_method' => $request->method,
+                'pay_method' => 'Paid',
                 'discount' => $request->discount,
                 'paid' => $request->paid,
                 'balance' => $request->balance,
                 'store_id' => auth()->user()->store->id
             ]);
             $transaction->save();
+            foreach ($request->input('method', []) as $index => $method) {
+
+                Method::create([
+                    'transaction_id' => $transaction->id,
+                    'method' => $method,
+                    'amount' => $method_amount[$index]
+                ]);
+            }
         }else if($request->exists('client_id') === true){
             $client = Client::find($request->client_id);
             
@@ -190,14 +220,23 @@ class TransactionController extends Controller
                 'client_id' => $client->id,
                 'client_name' => $client->name,
                 'price' => $request->buy_price,
-                'pay_method' => $request->method,
+                'pay_method' => 'Paid',
                 'discount' => $request->discount,
                 'paid' => $request->paid,
                 'balance' => $request->balance,
                 'store_id' => auth()->user()->store->id
             ]);
             $transaction->save();
+            foreach ($request->input('method', []) as $index => $method) {
+
+                Method::create([
+                    'transaction_id' => $transaction->id,
+                    'method' => $method,
+                    'amount' => $method_amount[$index]
+                ]);
+            }
         }
+        
         
         foreach (Cart::where('user_id', auth()->user()->id)->get() as $cart) {
             $product = Product::find($cart->product_id);

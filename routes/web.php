@@ -118,6 +118,11 @@ Route::group(['middleware' => ['role:admin']], function(){
     Route::post('/categories/store', [CategoryController::class, 'store']);
     Route::post('/categories/update/{id}', [CategoryController::class, 'update']);
 
+    // Stocks
+    Route::get('/stocks/create', [StockController::class, 'create']);
+    Route::post('/stocks/store', [StockController::class, 'store']);
+    Route::get('/stocks_export', [StockController::class, 'export']);
+
 });
 Route::group(['middleware' => ['role:manager|admin']], function () {
     // Transactions
@@ -126,8 +131,5 @@ Route::group(['middleware' => ['role:manager|admin']], function () {
     Route::post('/transactions/generate_method/', [TransactionController::class, 'generate_method']);    
 
     
-    // Stocks
-    Route::get('/stocks/create', [StockController::class, 'create']);
-    Route::post('/stocks/store', [StockController::class, 'store']);
-    Route::get('/stocks_export', [StockController::class, 'export']);
+    
 });

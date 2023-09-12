@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -74,12 +76,36 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        
         $product = Product::find($id);
         $categories = Category::all();
+        $laststartWeek = Carbon::now()->subWeek()->startOfWeek()->toDateTimeString();
+        $lastendWeek = Carbon::now()->subWeek()->endOfWeek()->toDateTimeString();
+        $laststartMonth = Carbon::now()->subMonth()->startOfMonth()->toDateTimeString();
+        $lastendMonth = Carbon::now()->subMonth()->endOfMonth()->toDateTimeString();
+        $startWeek = Carbon::now()->startOfWeek()->toDateTimeString();
+        $endWeek = Carbon::now()->endOfWeek()->toDateTimeString();
+        $this_week_qty = Order::whereBetween('created_at', [$startWeek, $endWeek])->where('product_id', $id)->sum('quantity');
+        $last_week_qty = Order::whereBetween('created_at', [$laststartWeek, $lastendWeek])->where('product_id', $id)->sum('quantity');
+        $last_month_qty = Order::whereBetween('created_at', [$laststartMonth, $lastendMonth])->where('product_id', $id)->sum('quantity');
+        $today_qty = Order::where('created_at', Carbon::now()->toDateTimeString())->where('product_id', $id)->sum('quantity');
+        $this_week_amt = Order::whereBetween('created_at', [$startWeek, $endWeek])->where('product_id', $id)->sum('amount');
+        $last_week_amt = Order::whereBetween('created_at', [$laststartWeek, $lastendWeek])->where('product_id', $id)->sum('amount');
+        $last_month_amt = Order::whereBetween('created_at', [$laststartMonth, $lastendMonth])->where('product_id', $id)->sum('amount');
+        $today_amt = Order::where('created_at', Carbon::now()->toDateTimeString())->where('product_id', $id)->sum('amount');
+        
 
         return view('products.show', [
             'product' => $product,
-            'categories' => $categories
+            'categories' => $categories,
+            'this_week_qty' => $this_week_qty,
+            'last_week_qty' => $last_week_qty,
+            'last_month_qty' => $last_month_qty,
+            'today_qty' => $today_qty,
+            'this_week_amt' => $this_week_amt,
+            'last_week_amt' => $last_week_amt,
+            'last_month_amt' => $last_month_amt,
+            'today_amt' => $today_amt
         ]);
     }
 
