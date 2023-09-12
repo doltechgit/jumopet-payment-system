@@ -284,15 +284,15 @@
                     </div>
                     `
                 )
-                $('.method_amount').change(() => {
+                // $('.method_amount').change(() => {
 
-                    console.log($('.method_amount').val())
-                    $('.method_amount').each(function() {
-                        sum += +$(this).val()
-                        $('.paid').val(sum)
-                    })
+                //     console.log($('.method_amount').val())
+                //     $('.method_amount').each(function() {
+                //         sum += +$(this).val()
+                //         $('.paid').val(sum)
+                //     })
 
-                })
+                // })
             })
             $(document).on('click', '.remove_method', function() {
                 console.log('remove')
