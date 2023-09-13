@@ -1,6 +1,6 @@
 <x-layout>
-    <div class=" my-4 row ">
-        <div class="card mx-2">
+    <div class=" my-4 d-flex flex-wrap ">
+        <div class="card col-lg-6 col-md-12">
             <div class="card-header">
                 <h6 class="font-weight-bold">Transaction Summary</h6>
             </div>
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div class="card mx-2">
+        <div class="card col-lg-6 col-md-12">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="font-weight-bold">Transaction Summary</h6>
                 <div class="dropdown  d-sm-inline-block">
