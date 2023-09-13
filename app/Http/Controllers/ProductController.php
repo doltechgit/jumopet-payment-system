@@ -79,6 +79,7 @@ class ProductController extends Controller
         
         $product = Product::find($id);
         $categories = Category::all();
+        $today = date('Y-m-d', time());
         $laststartWeek = Carbon::now()->subWeek()->startOfWeek()->toDateTimeString();
         $lastendWeek = Carbon::now()->subWeek()->endOfWeek()->toDateTimeString();
         $laststartMonth = Carbon::now()->subMonth()->startOfMonth()->toDateTimeString();
@@ -88,11 +89,11 @@ class ProductController extends Controller
         $this_week_qty = Order::whereBetween('created_at', [$startWeek, $endWeek])->where('product_id', $id)->sum('quantity');
         $last_week_qty = Order::whereBetween('created_at', [$laststartWeek, $lastendWeek])->where('product_id', $id)->sum('quantity');
         $last_month_qty = Order::whereBetween('created_at', [$laststartMonth, $lastendMonth])->where('product_id', $id)->sum('quantity');
-        $today_qty = Order::where('created_at', Carbon::now()->toDateTimeString())->where('product_id', $id)->sum('quantity');
+        $today_qty = Order::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->where('product_id', $id)->sum('quantity');
         $this_week_amt = Order::whereBetween('created_at', [$startWeek, $endWeek])->where('product_id', $id)->sum('amount');
         $last_week_amt = Order::whereBetween('created_at', [$laststartWeek, $lastendWeek])->where('product_id', $id)->sum('amount');
         $last_month_amt = Order::whereBetween('created_at', [$laststartMonth, $lastendMonth])->where('product_id', $id)->sum('amount');
-        $today_amt = Order::where('created_at', Carbon::now()->toDateTimeString())->where('product_id', $id)->sum('amount');
+        $today_amt = Order::whereBetween('created_at', [$today . ' 00:00:00', $today . ' 23:59:59'])->where('product_id', $id)->sum('amount');
         
 
         return view('products.show', [

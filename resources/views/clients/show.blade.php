@@ -80,7 +80,7 @@
                                             <span class="col-lg-10 col-md-12">
                                                 <div class="form-group">
 
-                                                    <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" value="0" />
+                                                    <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" required />
                                                     @error('discount')
                                                     <small class="text-danger">{{$message}}</small>
                                                     @enderror
@@ -355,7 +355,7 @@
                         <span class="col-lg-6 d-flex justify-content-between px-0">
                             <span class="col-lg-10 col-md-12">
                                 <div class="form-group">
-                                    <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" value="0" />
+                                    <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" required />
                                     @error('discount')
                                     <small class="text-danger">{{$message}}</small>
                                     @enderror
