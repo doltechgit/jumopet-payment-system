@@ -92,7 +92,21 @@
                                     </div>
 
                                 </div>
-
+                                
+                                <div class="">
+                                    <span class="btn btn-sm text-primary apply_discount">Apply Discount</span>
+                                </div>
+                                <div class="row discount_area" style="display: none;">
+                                    <span class="col-lg-12 col-md-12 px-2">
+                                        <div class="form-group">
+                                            <label><small>Discount:</small></label>
+                                            <input class="form-control discount" type="number" step="any" name="discount" id="discount" placeholder="Discount" value="0" />
+                                            @error('discount')
+                                            <small class="text-danger">{{$message}}</small>
+                                            @enderror
+                                        </div>
+                                    </span>
+                                </div>
 
 
                                 <div class="row">
@@ -115,20 +129,7 @@
                                         </div>
                                     </span>
                                 </div>
-                                <div class="">
-                                    <span class="btn btn-sm text-primary apply_discount">Apply Discount</span>
-                                </div>
-                                <div class="row discount_area" style="display: none;">
-                                    <span class="col-lg-12 col-md-12 px-2">
-                                        <div class="form-group">
-                                            <label><small>Discount:</small></label>
-                                            <input class="form-control discount" type="number" step="any" name="discount" id="discount" placeholder="Discount" value="0" />
-                                            @error('discount')
-                                            <small class="text-danger">{{$message}}</small>
-                                            @enderror
-                                        </div>
-                                    </span>
-                                </div>
+
                             </div>
                             <div class="form-group">
                                 <input class="form-control buy_price" type="hidden" name="buy_price" id="buy_price" placeholder="Total Price" value="{{old('price')}}" />
