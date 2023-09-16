@@ -17,20 +17,20 @@ class MethodReport implements FromView
 {
     use Exportable;
 
-    public $transaction;
+    public $methods;
     
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function __construct($transaction)
+    public function __construct($methods)
     {
-        $this->transaction = $transaction;
+        $this->methods = $methods;
     }
     
     public function view(): View
     {
-        return view('transactions.export', [
-            'transactions' => $this->transaction
+        return view('transactions.methods', [
+            'methods' => $this->methods
         ]);
     }
 }

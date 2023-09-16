@@ -362,10 +362,9 @@ class TransactionController extends Controller
 
     public function generate_method(Request $request)
     {
-        $transaction = Transaction::whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->where('pay_method', $request->method)->get();
-        return (new MethodReport($transaction))->download('jt-' . $request->method . '.csv');
+        $methods = Method::whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->where('method', $request->method)->get();
+        return (new MethodReport($methods))->download('jt-' . $request->method . '.csv');
     }
-
     /**
      * Remove the specified resource from storage.
      *
