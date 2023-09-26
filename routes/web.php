@@ -30,7 +30,50 @@ Route::middleware('guest')->group(function(){
     
 });
 
+Route::group(['middleware' => ['role:admin']], function () {
+    // Admin
+    Route::get('/admin', [AdminController::class, 'index']);
 
+    //Clients
+    Route::get('/creditors', [ClientController::class, 'credit']);
+
+    //Registration
+    Route::get('/register', [UserController::class, 'create']);
+    Route::post('/register', [UserController::class, 'store']);
+
+    //Settings
+    Route::get('/settings', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::post('/users/update/{id}', [UserController::class, 'update']);
+    Route::get('/users/delete/{id}', [UserController::class, 'destroy']);
+
+    // Store
+    Route::get('/stores', [StoreController::class, 'index']);
+    Route::get('/stores/create', [StoreController::class, 'create']);
+    Route::get('/stores/{id}', [StoreController::class, 'show']);
+    Route::post('/stores/update/{id}', [StoreController::class, 'update']);
+
+
+    // Products
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::post('/products/store', [ProductController::class, 'store']);
+    Route::get('/products/create', [ProductController::class, 'create']);
+
+    Route::post('/products/update/{id}', [ProductController::class, 'update']);
+    Route::get('/products/delete/{id}', [ProductController::class, 'destroy']);
+
+
+    // Categories
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
+    Route::post('/categories/store', [CategoryController::class, 'store']);
+    Route::post('/categories/update/{id}', [CategoryController::class, 'update']);
+
+    // Stocks
+    Route::get('/stocks/create', [StockController::class, 'create']);
+    Route::post('/stocks/store', [StockController::class, 'store']);
+    Route::get('/stocks_export', [StockController::class, 'export']);
+});
 
 
 Route::middleware('auth')->group(function(){
@@ -79,51 +122,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/stocks', [StockController::class, 'index']);
 });
 
-Route::group(['middleware' => ['role:admin']], function(){
-    // Admin
-    Route::get('/admin', [AdminController::class, 'index']);
 
-    //Clients
-    Route::get('/creditors', [ClientController::class, 'credit']);
-
-    //Registration
-    Route::get('/register', [UserController::class, 'create']);
-    Route::post('/register', [UserController::class, 'store']);
-
-    //Settings
-    Route::get('/settings', [UserController::class, 'index']);
-    Route::get('users/{id}', [UserController::class, 'show']);
-    Route::post('/users/update/{id}', [UserController::class, 'update']);
-    Route::get('/users/delete/{id}', [UserController::class, 'destroy']);
-
-    // Store
-    Route::get('/stores', [StoreController::class, 'index']);
-    Route::get('/stores/create', [StoreController::class, 'create']);
-    Route::get('/stores/{id}', [StoreController::class, 'show']);
-    Route::post('/stores/update/{id}', [StoreController::class, 'update']);
-
-
-    // Products
-    Route::get('/products', [ProductController::class, 'index']);
-    Route::post('/products/store', [ProductController::class, 'store']);
-    Route::get('/products/create', [ProductController::class, 'create']);
-    
-    Route::post('/products/update/{id}', [ProductController::class, 'update']);
-    Route::get('/products/delete/{id}', [ProductController::class, 'destroy']);
-
-
-    // Categories
-    Route::get('/categories', [CategoryController::class, 'index']);
-    Route::get('/categories/{id}', [CategoryController::class, 'show']);
-    Route::post('/categories/store', [CategoryController::class, 'store']);
-    Route::post('/categories/update/{id}', [CategoryController::class, 'update']);
-
-    // Stocks
-    Route::get('/stocks/create', [StockController::class, 'create']);
-    Route::post('/stocks/store', [StockController::class, 'store']);
-    Route::get('/stocks_export', [StockController::class, 'export']);
-
-});
 Route::group(['middleware' => ['role:manager|admin']], function () {
     // Transactions
     Route::get('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
