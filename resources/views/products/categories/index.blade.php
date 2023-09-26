@@ -22,7 +22,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <input class="form-control " type="number" name="price" id="price" placeholder="Price per Unit" value="{{old('price')}}" />
+                        <input class="form-control " type="number" step="any" name="price" id="price" placeholder="Price per Unit" value="{{old('price')}}" />
                         @error('price')
                         <small class="text-danger">{{$message}}</small>
                         @enderror
