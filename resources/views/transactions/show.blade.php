@@ -75,12 +75,42 @@
                     <td></td>
                 </tr>
             </table>
+            @role('admin')
             @if($transaction->balance > 0)
             <div class="my-2">
                 <p class="m-0 font-weight-bold">Pay Balance</p>
                 <hr>
                 <form method="POST" action="/transactions/update/{{$transaction->id}}">
                     @csrf
+                    <div class="method_area">
+                        <div class="row">
+                            <span class="col-lg-6 col-md-12 px-2">
+                                <div class="form-group">
+                                    <select class="form-control method" id="method" name="method[]" value="{{old('method')}}" required>
+                                        <option value="">Payment Method</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="POS">POS</option>
+                                        <option value="Transfer">Transfer</option>
+                                    </select>
+                                </div>
+                            </span>
+                            <span class="col-lg-6 d-flex justify-content-between px-0">
+                                <span class="col-lg-10 col-md-12">
+                                    <div class="form-group">
+
+                                        <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" required />
+                                        @error('discount')
+                                        <small class="text-danger">{{$message}}</small>
+                                        @enderror
+                                    </div>
+                                </span>
+                                <span class="">
+                                    <span class="btn btn-primary btn-sm add_method"><i class="fa fa-plus"></i></span>
+                                </span>
+                            </span>
+                        </div>
+
+                    </div>
                     <div class="form-group">
                         <label><small>Balance: </small></label>
                         <input class="form-control" type="number" name='balance' placeholder="&#8358; 000.000" value="{{$transaction->balance}}" />
@@ -94,6 +124,7 @@
                 </form>
             </div>
             @endif
+            @endrole
         </div>
         <div class="card col-lg-5 col-md-12 mx-2 p-5 print_area border-0" id="print_area">
             <div class="card-header text-center border-0" style="text-align: center">
@@ -193,5 +224,72 @@
             })
         })
     </script>
+    <script>
+        $(document).ready(function() {
+            $("#open_client_transaction").on('click', function() {
+                console.log('here')
+                $("#client_transaction").show()
+            })
+
+            $("#close_transaction").on('click', function() {
+                $("#client_transaction").hide()
+            })
+        })
+
+        $(document).ready(function() {
+            let sum = 0
+            $(".add_method").on('click', function() {
+                console.log('here')
+                $(".method_area").append(
+                    `
+                    <div class="row added_method">
+                        <span class="col-lg-6 col-md-12 px-2">
+                            <div class="form-group">
+                                <select class="form-control method" id="method" name="method[]" value="{{old('method')}}">
+                                    <option value="">Payment Method</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="POS">POS</option>
+                                    <option value="Transfer">Transfer</option>
+                                </select>
+                            </div>
+                        </span>
+                        <span class="col-lg-6 d-flex justify-content-between px-0">
+                            <span class="col-lg-10 col-md-12">
+                                <div class="form-group">
+                                    <input class="form-control method_amount" type="number" step="any" name="method_amount[]" id="" placeholder="" required />
+                                    @error('discount')
+                                    <small class="text-danger">{{$message}}</small>
+                                    @enderror
+                                </div>
+                            </span>
+                            <span class="">
+                                <span class="btn  btn-sm remove_method"><i class="fa fa-times"></i></span>
+                            </span>
+                        </span>
+                    </div>
+                    `
+                )
+                // $('.method_amount').change(() => {
+
+                //     console.log($('.method_amount').val())
+                //     $('.method_amount').each(function() {
+                //         sum += +$(this).val()
+                //         $('.paid').val(sum)
+                //     })
+
+                // })
+            })
+            $(document).on('click', '.remove_method', function() {
+                console.log('remove')
+                $(this).closest('.added_method').remove()
+            })
+            $(document).on('click', '.apply_discount', () => {
+                console.log('show')
+                $('.discount_area').show()
+            })
+
+        })
+    </script>
+
 
 </x-layout>
