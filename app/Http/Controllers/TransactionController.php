@@ -383,11 +383,33 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         $transaction = Transaction::find($id);
-        $product = Product::find(1);
+        $orders = Order::where('transaction_id', $id)->get();
+        $methods = Method::where('transaction_id', $id)->get();
+        foreach($orders as $order){
+            
+            $product = Product::find($order->product_id);
+            // dd($order);
+            $rgb = CurrentStock::find(auth()->user()->store->id);
 
-        $renew_quantity = $product->quantity + $transaction->quantity;
-        $product->quantity = $renew_quantity;
-        $product->save();
+            if (strpos($product->category->slug, 'rgb') === 0) {
+                $updated_quantity = $product->quantity + $order->quantity;
+                $rgb->quantity = $rgb->quantity - $order->quantity;
+                $product->quantity = $updated_quantity;
+                $product->save();
+                $rgb->save();
+            } else {
+                $updated_quantity = $product->quantity + $order->quantity;
+                $product->quantity = $updated_quantity;
+                $product->save();
+            }
+
+            $order->delete();
+        }
+
+        foreach($methods as $method){
+            $method->delete();
+        }
+        
 
         $transaction->delete();
 
