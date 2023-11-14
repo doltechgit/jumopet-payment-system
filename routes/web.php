@@ -73,6 +73,9 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/stocks/create', [StockController::class, 'create']);
     Route::post('/stocks/store', [StockController::class, 'store']);
     Route::get('/stocks_export', [StockController::class, 'export']);
+
+    //Transcations
+    Route::get('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
 });
 
 
@@ -125,7 +128,7 @@ Route::middleware('auth')->group(function(){
 
 Route::group(['middleware' => ['role:manager|admin']], function () {
     // Transactions
-    Route::get('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
+    
     Route::post('/transactions/generate/', [TransactionController::class, 'generate']);
     Route::post('/transactions/generate_method/', [TransactionController::class, 'generate_method']);    
 
