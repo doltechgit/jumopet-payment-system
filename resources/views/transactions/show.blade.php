@@ -71,8 +71,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Transaction by:</td>
-                    <td>Cashier</td>
+                    @if($transaction->user->name !== null)
+                    <td>Transaction by: {{$transaction->user->name}}</td>
+                    @else
+                    <td>Transaction by: Cashier</td>
+                    @endif
+
+                    <td></td>
                 </tr>
             </table>
             @role('admin')
@@ -181,7 +186,12 @@
                 </tr>
                 <tr>
                     <td><small>Transaction by: </small></td>
+                    @if($transaction->user->name !== null)
                     <td><small>{{$transaction->user->name}}</small></td>
+                    @else
+                    <td><small>Cashier</small></td>
+                    @endif
+                   
                 </tr>
             </table>
             <hr>
