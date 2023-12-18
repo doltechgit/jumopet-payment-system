@@ -71,6 +71,11 @@
                     </td>
                 </tr>
                 <tr>
+                    @if($transaction->user->name !== null)
+                    <td>{{$transaction->user->name}}</td>
+                    @else
+                    <td>Cashier</td>
+                    @endif
                     <td>Transaction by: {{$transaction->user->name}}</td>
                     <td></td>
                 </tr>
