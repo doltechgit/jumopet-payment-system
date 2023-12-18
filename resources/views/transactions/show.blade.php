@@ -76,7 +76,6 @@
                     @else
                     <td>Cashier</td>
                     @endif
-                    <td>Transaction by: {{$transaction->user->name}}</td>
                     <td></td>
                 </tr>
             </table>
