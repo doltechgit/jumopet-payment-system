@@ -71,7 +71,7 @@
                     </td>
                 </tr>
                 <tr>
-                    @if($transaction->user->name !== null)
+                    @if($transaction->user !== null)
                     <td>Transaction by: {{$transaction->user->name}}</td>
                     @else
                     <td>Transaction by: Cashier</td>
@@ -186,7 +186,7 @@
                 </tr>
                 <tr>
                     <td><small>Transaction by: </small></td>
-                    @if($transaction->user->name !== null)
+                    @if($transaction->user !== null)
                     <td><small>{{$transaction->user->name}}</small></td>
                     @else
                     <td><small>Cashier</small></td>
